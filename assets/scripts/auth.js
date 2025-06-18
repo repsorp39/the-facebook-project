@@ -6,4 +6,4 @@ function isAdmin(){
     return false;
 }
 
-export { isAdmin, isAuthenticated}
+export { isAdmin, isAuthenticated } ;

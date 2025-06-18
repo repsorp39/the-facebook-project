@@ -4,7 +4,7 @@ async function navigateTo(url){
         //simulate a loading state
         addLoader();
 
-        //check if it a private page
+        //check if it is a private page
         if(url.includes("admin")){
             if(!isAdmin()) navigateTo("login");
             return;
@@ -16,7 +16,8 @@ async function navigateTo(url){
         }
 
         //fetch the html content
-        const fileName = url + ".html";
+        const fileName = `${ url.startsWith("/") ? url.slice(1,) : url}.html`;
+        
         const response = await fetch(`/views/${fileName}`);
         const body = await response.text();
 
@@ -31,6 +32,12 @@ async function navigateTo(url){
         if(!isAuthenticated()) hideLoggedInUsersParts();
         else hideNoLoggedUsersParts();
         if(!isAdmin())  hideAdminParts();
+
+        //change the value of the url in the url bar
+        const currentPath = fileName.replace(/.html/,'');
+        window.history.replaceState(null,null, `/${currentPath}`);
+        sessionStorage.setItem('prev-path',currentPath);
+        console.log('++');
         
         //end of loading state
         removeLoader();
@@ -66,10 +73,9 @@ async function insertFooter(){
 
 
 function handleReload(){
-    const savedPath = localStorage.getItem("last-path");
-    if(savedPath){
-        navigateTo(savedPath);
-    }
+    const currentPath = sessionStorage.getItem('prev-path') ?? "/";
+    if(currentPath != "/") navigateTo(currentPath);
+    return;
 }
 
 function hideLoggedInUsersParts(){
@@ -96,3 +102,5 @@ export {
     removeLoader,
     renderApp
 }
+
+window.navigateTo = navigateTo;
