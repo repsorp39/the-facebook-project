@@ -3,9 +3,7 @@ function isAuthenticated(){
 }
 
 function isAdmin(){
-return false;
+    return false;
 }
 
-function isModerator(){
-
-}
+export { isAdmin, isAuthenticated}

@@ -1,20 +1,41 @@
+import { isAdmin,isAuthenticated } from "./auth.js";
 async function navigateTo(url){
     try {
         //simulate a loading state
         addLoader();
+
+        //check if it a private page
+        if(url.includes("admin")){
+            if(!isAdmin()) navigateTo("login");
+            return;
+        }
+
+        if(url.includes("logged")){
+            if(!isAuthenticated()) navigateTo("login");
+            return;
+        }
+
         //fetch the html content
         const fileName = url + ".html";
         const response = await fetch(`/views/${fileName}`);
         const body = await response.text();
+
         //add in the body
         renderApp(body);
+
         //set the header
         await insertHeader();
         await insertFooter();
 
+        //remove private parts
+        if(!isAuthenticated()) hideLoggedInUsersParts();
+        else hideNoLoggedUsersParts();
+        if(!isAdmin())  hideAdminParts();
+        
+        //end of loading state
         removeLoader();
     } catch (e) {
-        
+        console.log(e);
     }
 
 }
@@ -44,36 +65,33 @@ async function insertFooter(){
 }
 
 
-function goToPreviousPath(){
+function handleReload(){
     const savedPath = localStorage.getItem("last-path");
     if(savedPath){
         navigateTo(savedPath);
     }
 }
 
-function hideForNoLoggedIn(){
-    const sections = $(".for-logged-in");
-    for(const section of sections){
-        section.remove();
-    }
+function hideLoggedInUsersParts(){
+    $(".for-logged-in").remove();
 }
 
-function hideForNonAdmin(){
-    const sections = $(".for-admin");
-    console.log(sections);
-    
-    // for(const section of sections){
-    //     section.remove();
-    // }
+function hideAdminParts(){
+   $(".for-admin").remove();
+}
+
+function hideNoLoggedUsersParts(){
+    $(".for-nologged").remove();
 }
 
 export {
     navigateTo,
     insertFooter,
     insertHeader,
-    hideForNoLoggedIn,
-    hideForNonAdmin,
-    goToPreviousPath,
+    hideNoLoggedUsersParts,
+    hideAdminParts,
+    hideLoggedInUsersParts,
+    handleReload,
     addLoader,
     removeLoader,
     renderApp
