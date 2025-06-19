@@ -1,6 +1,9 @@
 <?php
 namespace App\UserService;
-require_once("../database/db.php");
+
+use PDOException;
+
+require_once("../../database/db.php");
 
 class User {
     private $bdd;
@@ -10,20 +13,42 @@ class User {
     }
     
     public function create(array $user):bool{
-        $query = $this->bdd->prepare("INSERT INTO users (name,email, ...) VALUES (:name,:email,...)");
-        $statement = $query->execute([
-            "name"=>$user["name"],
-            "email"=>$user["email"]
-        ]);
-        return $statement;
+        try{
+             $query = $this->bdd->prepare(
+                "INSERT INTO users (firstname,lastname,birthday,gender,email,password,picture)
+                 VALUES (:firstname,:lastname,:birthday,:gender,:email,:password,:picture)"
+            );
+            $statement = $query->execute([
+                "firstname"=>$user["firstname"],
+                "email"=>$user["email"],
+                "lastname"=>$user["lastname"],
+                "birthday"=>$user["birthday"],
+                "gender"=>$user["gender"],
+                "password"=>$user["password"],
+                "picture"=>empty($user["picture"])? '/api/upload/images/noprofile.jpg':$user["picture"]
+            ]);
+            return $statement;
+        }catch (PDOException $e){
+            die($e->getMessage());
+        }
     }
 
     public function update(array $user):bool{
-        $query = $this->bdd->prepare("UPDATE users SET name=:name, email=:email,... WHERE id = :id");
+        $query = $this->bdd->prepare(
+        "UPDATE users 
+        SET email=:email,firstname=:firstname,lastname=:lastname,gender=:gender,
+        birthday=:birthday,is_online=:is_online,picture=:picture,password=:password
+        WHERE id=:id");
         $statement = $query->execute([
-            "name"=>$user["name"],
-            "email"=>$user["email"],
-            "id"=>$user["id"],
+                "email"=>$user["email"],
+                "firstname"=>$user["firstname"],
+                "lastname"=>$user["lastname"],
+                "gender"=>$user["gender"],
+                "birthday"=>$user["birthday"],
+                "is_online"=>$user["is_online"],
+                "picture"=>$user["picture"],
+                "password"=>$user["password"],
+                "id"=>$user["id"],
 
         ]);
         return $statement;
@@ -35,13 +60,14 @@ class User {
        return $statement;
     }
     
-    public function getByEmail(string $email):array{
+    public function getByEmail(string $email):array|null{
        $query = $this->bdd->prepare("SELECT * FROM users WHERE email = ?");
        $query->execute([$email]);
-       return $query->fetch();
+       $user = $query->fetch();
+       return $user ? $user : null;
     }
 
-    public function getById(string $id):array{
+    public function getById(string $id){
        $query = $this->bdd->prepare("SELECT * FROM users WHERE id = ?");
        $query->execute([$id]);
        return $query->fetch();

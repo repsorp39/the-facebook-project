@@ -2,7 +2,7 @@ import { isAdmin,isAuthenticated } from "./auth.js";
 async function navigateTo(url){
     try {
         //simulate a loading state
-        addLoader();
+        // addLoader();
 
         //check if it is a private page
         if(url.includes("admin")){
@@ -37,7 +37,6 @@ async function navigateTo(url){
         const currentPath = fileName.replace(/.html/,'');
         window.history.replaceState(null,null, `/${currentPath}`);
         sessionStorage.setItem('prev-path',currentPath);
-        console.log('++');
         
         //end of loading state
         removeLoader();
@@ -75,7 +74,6 @@ async function insertFooter(){
 function handleReload(){
     const currentPath = sessionStorage.getItem('prev-path') ?? "/";
     if(currentPath != "/") navigateTo(currentPath);
-    return;
 }
 
 function hideLoggedInUsersParts(){

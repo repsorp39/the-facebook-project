@@ -1,8 +1,8 @@
 <?php
     namespace App\JSON;
-
     class JSON{
-        public static function serve (array|string $data){
-        echo json_encode($data);
-    }
+        public static function serve (int $status ,array|string $data){
+            http_response_code($status);
+            echo json_encode($data);
+        }
 }

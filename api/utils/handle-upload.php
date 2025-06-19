@@ -1,31 +1,25 @@
 <?php
-
-//$picture is $_FILE["key"]
-function handleUpload($picture){
-  //handle file treatment
-  if (isset($picture) && $picture['error'] === 0) {
-    //Check if the uploaded image size do not exceed 5mo.
-    if ($picture['size'] > 5000000) {
-      throw new Exception('Fichier trop volumineux. 5mo max');
-    } else {
-      //check if is is really an image
-      $fileExtension = pathinfo($picture['name'], PATHINFO_EXTENSION);
-      $allowedExtensions = ['jpeg', 'jpg', 'png', 'webp'];
-
-      if (!in_array($fileExtension, $allowedExtensions)) {
-        throw new Exception("L'extension *" . $fileExtension . "* non autorisée");
-      } else {
-        $tempName = $picture['tmp_name'];
-        $fileName = time() . '_' . basename($picture['name']);
-        $destinationPath = '../upload/' . $fileName; //path to save the file
-        if (move_uploaded_file($tempName, $destinationPath)) {
-          return $destinationPath;
+function handleUpload($file,$type){
+  try{
+      //handle file treatment
+      if (isset($file) && $file['error'] === 0) {
+        //Check if the uploaded image size do not exceed 10mo.
+        if ($file['size'] > 10_000_000) {
+          throw new Exception('Fichier trop volumineux. 10mo max');
         } else {
-          throw new Exception("Une erreur est survenue");
+            $tempName = $file['tmp_name'];
+            $fileName = time() . '_' . basename($file['name']);
+            $destinationPath = "../../upload/$type"."s/". $fileName; //path to save the file
+            if (move_uploaded_file($tempName, $destinationPath)) {
+              return "/api/upload/$type"."s/".$fileName;
+            } else {
+              throw new Exception("Une erreur est survenue");
+            }
         }
-      }
-    }
   } else {
     throw new Exception("Une erreur est survenue");
+  }
+  }catch(Exception $e){
+      die($e->getMessage());
   }
 }
