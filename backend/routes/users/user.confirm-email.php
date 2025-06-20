@@ -1,6 +1,5 @@
 <?php
 require_once("../../config/cors.php");
-
 require_once("../../utils/serve-json.php");
 require_once("../../services/users-service.php");
 require_once("../../utils/token-handler.php");
@@ -15,8 +14,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
     if(empty($email) || empty($token)) return JSON::serve(400,["message"=>"Champs requis !"]);
     $decodedEmail = jwtDecode($token,"email");
-
-    if($email !== $decodedEmail) return JSON::serve(401,["message"=>"Les emails ne correspondent"]);
+    if(!$decodedEmail) return JSON::serve(401,["message"=>"Token expiré!"]);
+    if($email !== $decodedEmail) return JSON::serve(401,["message"=>"Les emails ne correspondent pas"]);
 
     $User = new User();
     $foundUser = $User->getByEmail($email);
@@ -24,7 +23,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     $User->update($foundUser);
     JSON::serve(200,["message"=>"Email confirmed!"]);
 }else{
-    JSON::serve(405,["message"=>""]);
+    JSON::serve(405,["message"=>"Methode non autorisée"]);
 }
 
 

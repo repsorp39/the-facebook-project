@@ -10,7 +10,7 @@ require("../../modules/PHPMailer-master/src/SMTP.php");
 require("../../utils/email-template.php");
 
 class Email {
-    public static function sendAccountConfirmation ($user,$otpCode){
+    public static function send ($user,$secret,$type){
         try {
             $mail = new PHPMailer(true);
             $mail->isSMTP();                                            
@@ -27,7 +27,9 @@ class Email {
             //Content
             $mail->isHTML(true);                       
             $mail->Subject = "Email confirmation";
-            $mail->Body    = getAccountConfirmTemplate($user["firstname"],$otpCode);
+            $mail->Body    = $type === "confirmation"
+                     ? getAccountConfirmTemplate($user["firstname"],$secret)
+                     : getPasswordResetTemplate("" ,$secret);
             $mail->send();
 
         } catch (Exception $e) {

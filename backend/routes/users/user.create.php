@@ -58,9 +58,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             $response = [
                 "message"=>"User saved successfully"
             ];
-            $token = encodeForConfirmation($email);
+            $token = encodeForConfirmation($email,"email");
             $urlConfirmation = $_SERVER["HTTP_ORIGIN"] ?? "" . "?token=$token&email=$email";
-            Email::sendAccountConfirmation(["firstname"=>$firstname,"email"=>$email],$urlConfirmation);
+            Email::send(["firstname"=>$firstname,"email"=>$email],$urlConfirmation,"confirmation");
         }else{
             $status = 500;
             $response = [

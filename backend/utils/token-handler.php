@@ -2,6 +2,7 @@
 require("../../modules/firebase/php-jwt/src/JWT.php");
 require("../../modules/firebase/php-jwt/src/Key.php");
 require("../../modules/firebase/php-jwt/src/SignatureInvalidException.php");
+require("../../modules/firebase/php-jwt/src/ExpiredException.php");
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -36,14 +37,15 @@ function jwtDecode($token,$key){
     }
 }
 
-function encodeForConfirmation($email){
+function encodeForConfirmation($data,$key){
     global $privateKey;
     $payload = [
         'exp' => time() + 60*5 ,//5min
-        "email" => $email
+        $key => $data
     ];
     $token = JWT::encode($payload, $privateKey, 'HS256'); 
     return $token;
 }
+
 
 
