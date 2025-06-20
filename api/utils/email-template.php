@@ -1,5 +1,5 @@
 <?php 
- function getAccountConfirmTemplate($fullname,$otpCode){
+ function getAccountConfirmTemplate($fullname,$url){
     return <<<EOT
         <!DOCTYPE html>
         <html lang="fr">
@@ -35,12 +35,12 @@
             display: inline-block;
             background-color: #111827;
             padding: 12px 24px;
-            font-size: 24px;
+            font-size: 1p7x;
             font-weight: bold;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             color: #00bcd4;
             border-radius: 6px;
-            margin: 20px auto;
+            margin: 15px auto;
             text-align: center;
             }
             .footer {
@@ -54,13 +54,13 @@
         <body>
         <div class="container">
             <h1>Let's Chat</h1>
-            <p>Bonjour,$fullname</p>
+            <p>Bonjour $fullname,</p>
             <p>Merci de vous être inscrit sur <strong>Let's Chat</strong> 👋</p>
-            <p>Pour confirmer votre adresse e-mail, veuillez saisir le code ci-dessous dans l'application :</p>
+            <p>Pour confirmer votre adresse e-mail, veuillez cliquer sur le lien ci-dessous et accéder à  l'application :</p>
             
-            <div class="otp">$otpCode</div> <!-- Remplacer dynamiquement par le code OTP -->
+            <a class="otp" href="$url">Lien de confirmation</a> 
 
-            <p>Ce code expirera dans 5 minutes.</p>
+            <p>Ce lien expirera dans 5 minutes.</p>
             <p>Si vous n’avez pas initié cette demande, vous pouvez ignorer cet e-mail.</p>
 
             <div class="footer">

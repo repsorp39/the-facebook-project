@@ -1,10 +1,10 @@
 <?php
-session_start();
-
+require_once("../../config/cors.php");
 require_once("../../utils/serve-json.php");
 require_once("../../services/users-service.php");
 require_once("../../services/email-service.php");
 require("../../utils/handle-upload.php");
+require("../../utils/token-handler.php");
 
 
 use App\JSON\JSON;
@@ -58,9 +58,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             $response = [
                 "message"=>"User saved successfully"
             ];
-            $otpCode = substr(uniqid(),0,6);
-            Email::sendAccountConfirmation(["firstname"=>$firstname,"email"=>$email],$otpCode);
-            $_SESSION['otpcode'] = $otpCode;
+            $token = encodeForConfirmation($email);
+            $urlConfirmation = $_SERVER["HTTP_ORIGIN"] ?? "" . "?token=$token&email=$email";
+            Email::sendAccountConfirmation(["firstname"=>$firstname,"email"=>$email],$urlConfirmation);
         }else{
             $status = 500;
             $response = [

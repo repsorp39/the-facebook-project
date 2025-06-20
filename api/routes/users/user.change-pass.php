@@ -1,14 +1,17 @@
 <?php
-session_start();
+require_once("../../config/cors.php");
 require_once("../../utils/serve-json.php");
 require_once("../../services/users-service.php");
 require("../../utils/handle-upload.php");
+require("../../utils/chech-token.php");
 
 use App\JSON\JSON;
 use App\UserService\User;
 
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-    if(!$_SESSION['id']) return JSON::serve(401,["message"=>"Not allowed!"]);
+    $userid = decodeTokenFromHeader();
+    
+    if(!$userid) return JSON::serve(401,["message"=>"Not allowed!"]);
 
     $User = new User();
     $oldPassword = $_POST["old_password"] ?? '';
@@ -16,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
     if(empty($oldPassword) || empty($newPassword)) return JSON::serve(401,["message"=>"Ancien et nouveau mot de passe requis"]);
 
-    $foundUser = $User->getById($_SESSION['id']);
+    $foundUser = $User->getById($userid);
 
     $passwordMatch = password_verify($oldPassword,$foundUser["password"]);
     if(!$passwordMatch) return JSON::serve(403,["message"=>"Mot de passe incorrecte"]);
