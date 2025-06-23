@@ -1,0 +1,17 @@
+<?php
+require_once("../../config/cors.php");
+require_once("../../utils/serve-json.php");
+require("../../utils/chech-token.php");
+require("../../services/friendship-service.php");
+
+use App\JSON\JSON;
+use App\FriendShipService\FriendShip;
+
+
+if($_SERVER["REQUEST_METHOD"] === "GET"){
+    $userid = decodeTokenFromHeader();
+    if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
+    $Friendship  = new FriendShip($userid);
+    $friends = $Friendship->getAllFriendRequest();
+    JSON::serve(200,$friends);
+}
