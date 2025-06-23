@@ -40,7 +40,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         //email must be unique in the db
         $foundUser = $User->getByEmail($email);
         if($foundUser) {
-            return JSON::serve(409, ["message" => "Un utilisateur avec cet email existe déjà"]);
+            return JSON::serve(409, ["message" => "Un utilisateur avec cet email existe déjà."]);
         }
 
         $success = $User->create([
@@ -59,7 +59,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
                 "message"=>"User saved successfully"
             ];
             $token = encodeForConfirmation($email,"email");
-            $urlConfirmation = $_SERVER["HTTP_ORIGIN"] ?? "" . "?token=$token&email=$email";
+            $urlConfirmation = ($_SERVER["HTTP_ORIGIN"] ?? "") . "/confirm-email?token=$token&email=$email";
             Email::send(["firstname"=>$firstname,"email"=>$email],$urlConfirmation,"confirmation");
         }else{
             $status = 500;
@@ -72,6 +72,4 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     } catch (Exception $e) {
         die($e->getMessage());
     }
-}else{
-    JSON::serve(405,["message"=>"Methode non autorisé"]);
 }

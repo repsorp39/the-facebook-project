@@ -40,7 +40,7 @@ function jwtDecode($token,$key){
 function encodeForConfirmation($data,$key){
     global $privateKey;
     $payload = [
-        'exp' => time() + 60*5 ,//5min
+        'exp' => time() + 60*15 ,//15min
         $key => $data
     ];
     $token = JWT::encode($payload, $privateKey, 'HS256'); 

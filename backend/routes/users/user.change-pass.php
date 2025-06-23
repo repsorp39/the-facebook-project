@@ -28,6 +28,3 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     $success = $User->update($foundUser);
     if($success) JSON::serve(200,["message"=>"Password edited!"]);
 }
-else{
-    JSON::serve(405,["message"=>"Methode non autorisé"]);
-}

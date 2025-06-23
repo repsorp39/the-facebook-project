@@ -18,6 +18,8 @@ class User {
                 "INSERT INTO users (firstname,lastname,birthday,gender,email,password,picture)
                  VALUES (:firstname,:lastname,:birthday,:gender,:email,:password,:picture)"
             );
+            $serverUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") 
+            . "://" . $_SERVER['HTTP_HOST']; 
             $statement = $query->execute([
                 "firstname"=>$user["firstname"],
                 "email"=>$user["email"],
@@ -25,7 +27,7 @@ class User {
                 "birthday"=>$user["birthday"],
                 "gender"=>$user["gender"],
                 "password"=>$user["password"],
-                "picture"=>empty($user["picture"])? '/api/upload/images/noprofile.jpg':$user["picture"]
+                "picture"=>empty($user["picture"])? $serverUrl.'/upload/images/noprofile.jpg':$user["picture"]
             ]);
             return $statement;
         }catch (PDOException $e){
@@ -37,7 +39,8 @@ class User {
         $query = $this->bdd->prepare(
         "UPDATE users 
         SET email=:email,firstname=:firstname,lastname=:lastname,gender=:gender,
-        birthday=:birthday,is_online=:is_online,picture=:picture,password=:password
+        birthday=:birthday,is_online=:is_online,picture=:picture,password=:password, 
+        reset_token=:reset_token,confirmed_email=:confirmed_email
         WHERE id=:id");
         $statement = $query->execute([
                 "email"=>$user["email"],
@@ -49,6 +52,8 @@ class User {
                 "picture"=>$user["picture"],
                 "password"=>$user["password"],
                 "id"=>$user["id"],
+                "reset_token"=>$user["reset_token"] ?? "",
+                "confirmed_email"=>$user["confirmed_email"] ?? "",
 
         ]);
         return $statement;

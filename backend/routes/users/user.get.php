@@ -11,13 +11,14 @@ use App\UserService\User;
 
 if($_SERVER["REQUEST_METHOD"] === "GET"){
     $userid = decodeTokenFromHeader();
-    
     if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
     $User = new User();
-    //on veut récupérer un seul utilisateur
-        $user = $User->getById($userid);
-        JSON::serve(200,$user);
-    }
-else{
-    JSON::serve(405,["message"=>"Methode non autorisé"]);
+    //si il y a un id dans la request on envoit les informations concernant cet utilisateur
+    //sinon juste ceux de l'utilisateur connecté
+    $request_id = $_GET["id"] ?? "";
+    if($request_id) $user = $User->getById($request_id);
+    else $user = $User->getById($userid);
+    
+    if($user) JSON::serve(200,$user);
+    else JSON::serve(404,[]);
 }

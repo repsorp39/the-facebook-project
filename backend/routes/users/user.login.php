@@ -19,11 +19,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
         $foundUser = $User->getByEmail($email);
         if(!$foundUser){
-            return JSON::serve(400,["message"=>"Mot de passe/email incorrecte"]);
+            return JSON::serve(400,["message"=>"Adresse email ou mot de passe incorrecte!"]);
         }
 
         $passwordMatch = password_verify($password,$foundUser['password']);
-        if(!$passwordMatch)  return JSON::serve(400,["message"=>"Mot de passe/email incorrecte"]);
+        if(!$passwordMatch)  return JSON::serve(400,["message"=>"Adresse email ou mot de passe incorrecte!"]);
 
         $token = jwtEncode($foundUser['id']);
 
@@ -38,6 +38,4 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         http_response_code(500);
         echo $e->getMessage();
     }
-}else{
-    JSON::serve(405,["message"=>"Methode non autorisé"]);
 }

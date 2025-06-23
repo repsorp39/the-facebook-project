@@ -12,14 +12,12 @@ use App\EmailService\Email;
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $email = $_POST["email"];
     if(empty($email)) return JSON::serve(400,["message"=>"Email requis"]);
-    $otp = substr(uniqid(),0,6);
-    Email::send(["email"=>$email],$otp,"reset");
     $User = new User();
     $foundUser = $User->getByEmail($email);
-    if($foundUser) {
-        $foundUser["reset-token"] = encodeForConfirmation($otp,"otp");
-        JSON::serve(200,["message"=>"Code envoyé"]);
-    }else{
-        JSON::serve(403,[]);
-    }
+    if(!$foundUser) return JSON::serve(404,[]);
+    $otp = substr(uniqid(),0,6);
+    Email::send(["email"=>$email],$otp,"reset");
+    $foundUser["reset_token"] = encodeForConfirmation($otp,"otp");
+    $User->update($foundUser);
+    JSON::serve(200,["message"=>"Code envoyé"]);
 }

@@ -22,13 +22,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     $foundUser["confirmed_email"] = 1;
     $User->update($foundUser);
     JSON::serve(200,["message"=>"Email confirmed!"]);
-}else{
-    JSON::serve(405,["message"=>"Methode non autorisée"]);
 }
-
-
-
-
 
 
 

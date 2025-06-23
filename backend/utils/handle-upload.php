@@ -11,7 +11,12 @@ function handleUpload($file,$type){
             $fileName = time() . '_' . basename($file['name']);
             $destinationPath = "../../upload/$type"."s/". $fileName; //path to save the file
             if (move_uploaded_file($tempName, $destinationPath)) {
-              return "/api/upload/$type"."s/".$fileName;
+              // URL complète avec protocole, domaine et chemin
+            $serverUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") 
+                        . "://" . $_SERVER['HTTP_HOST']; 
+           
+
+              return $serverUrl."/upload/$type"."s/".$fileName;
             } else {
               throw new Exception("Une erreur est survenue");
             }

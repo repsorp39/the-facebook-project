@@ -16,6 +16,7 @@
             }
             .container {
             max-width: 600px;
+            color:#ffffff;
             margin: 0 auto;
             background-color: #2a2a3d;
             padding: 40px;
@@ -23,7 +24,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.4);
             }
             h1 {
-            color: #00bcd4;
+            color: #1212bfff;
             text-align: center;
             margin-bottom: 20px;
             }
@@ -38,7 +39,7 @@
             font-size: 15px;
             font-weight: bold;
             letter-spacing: 4px;
-            color: #00bcd4;
+            color: #0813afff;
             border-radius: 6px;
             margin: 15px auto;
             text-align: center;
@@ -60,7 +61,7 @@
             
             <a class="otp" href="$url">Lien de confirmation</a> 
 
-            <p>Ce lien expirera dans 5 minutes.</p>
+            <p>Ce lien expirera dans 15 minutes.</p>
             <p>Si vous n’avez pas initié cette demande, vous pouvez ignorer cet e-mail.</p>
 
             <div class="footer">
@@ -86,34 +87,36 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
-            background-color: #1e1e2f;
+            background-color: #38383aff;
             color: #ffffff;
             }
             .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #2a2a3d;
+            background-color: #181717ff;
+            color: #ffffff;
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.4);
             }
             h1 {
-            color: #00bcd4;
+            color: #1f099cff;
             text-align: center;
             margin-bottom: 20px;
             }
             p {
             font-size: 16px;
             line-height: 1.6;
+            color: #ffffff;
             }
             .otp {
             display: inline-block;
-            background-color: #111827;
+            background-color: #05070aff;
             padding: 12px 24px;
             font-size: 1p7x;
             font-weight: bold;
             letter-spacing: 8px;
-            color: #00bcd4;
+            color: #0419d7ff;
             border-radius: 6px;
             margin: 15px auto;
             text-align: center;
@@ -134,7 +137,7 @@
             
             <span class="otp"> $otp </span>
 
-            <p>Ce code expirera dans 5 minutes.</p>
+            <p>Ce code expirera dans 15 minutes.</p>
             <p>
                 Si vous n’avez pas initié cette demande, vous pouvez ignorer cet e-mail et
                 changer votre mot de passe pour plus de sécurité. 

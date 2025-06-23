@@ -27,6 +27,4 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
     $User->update($user);
     JSON::serve(200,["message"=>"Successfully edited!"]);
-}else{
-    JSON::serve(405,["message"=>"Methode non autorisé"]);
 }
