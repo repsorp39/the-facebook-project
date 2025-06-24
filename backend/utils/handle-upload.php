@@ -8,7 +8,7 @@ function handleUpload($file,$type){
           throw new Exception('Fichier trop volumineux. 10mo max');
         } else {
             $tempName = $file['tmp_name'];
-            $fileName = time() . '_' . basename($file['name']);
+            $fileName = time() . '_' . str_replace(" ","_",basename($file['name']));
             $destinationPath = "../../upload/$type"."s/". $fileName; //path to save the file
             if (move_uploaded_file($tempName, $destinationPath)) {
               // URL complète avec protocole, domaine et chemin

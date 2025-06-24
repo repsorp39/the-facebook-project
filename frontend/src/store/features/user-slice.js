@@ -57,7 +57,7 @@ const registerUser = createAsyncThunk("/user/register",async (credentials,thunk)
   thunk.dispatch(loginUser(credentials));
 })
 
-const logoutUser = createAsyncThunk("/user/logout",async (credentials,thunk)=>{
+const logoutUser = createAsyncThunk("/user/logout",async ()=>{
   try {
     await axios.delete("/users/user.logout.php");
     localStorage.setItem("token","");
