@@ -24,6 +24,13 @@ class Comment{
     }
 
     public function getAll(string $postid):array{
-        return [];
+        try {
+            $sql = "SELECT * FROM comments WHERE post_id = :post_id ORDER BY created_at ASC";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([':post_id' => $postid]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
