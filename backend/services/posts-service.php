@@ -122,34 +122,34 @@ class Post
         }
     }
 
-    public function getFriendsPosts(string $userid): array
+    public function getFriendsPosts(string $userid)
     {
-        try {
-            require_once __DIR__ . '/friendship-service.php';
-            $friendshipService = new \App\FriendShipService\FriendShip($userid);
-            $friends = $friendshipService->getFriendshipList();
-            if (empty($friends)) {
-                return [];
-            }
-            // Préparer la liste des ids pour la requête SQL
-            $in  = str_repeat('?,', count($friends) - 1) . '?';
-            $sql = "SELECT p.*, u.firstname, u.lastname, u.picture as user_picture 
-                    FROM posts p 
-                    JOIN users u ON p.user_id = u.id 
-                    WHERE p.user_id IN ($in)
-                    ORDER BY p.post_id DESC";
-            $stmt = $this->bdd->prepare($sql);
-            $stmt->execute($friends);
-            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // Ajout des commentaires pour chaque post
-            require_once __DIR__ . '/comments-service.php';
-            $commentService = new \App\CommentService\Comment();
-            foreach ($posts as &$post) {
-                $post['comments'] = $commentService->getAll($post['post_id']);
-            }
-            return $posts;
-        } catch (Exception $e) {
-            return [];
-        }
+        // try {
+        //     require_once __DIR__ . '/friendship-service.php';
+        //     $friendshipService = new \App\FriendShipService\FriendShip($userid);
+        //     $friends = $friendshipService->getFriendshipList();
+        //     if (empty($friends)) {
+        //         return [];
+        //     }
+        //     // Préparer la liste des ids pour la requête SQL
+        //     $in  = str_repeat('?,', count($friends) - 1) . '?';
+        //     $sql = "SELECT p.*, u.firstname, u.lastname, u.picture as user_picture 
+        //             FROM posts p 
+        //             JOIN users u ON p.user_id = u.id 
+        //             WHERE p.user_id IN ($in)
+        //             ORDER BY p.post_id DESC";
+        //     $stmt = $this->bdd->prepare($sql);
+        //     $stmt->execute($friends);
+        //     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //     // Ajout des commentaires pour chaque post
+        //     require_once __DIR__ . '/comments-service.php';
+        //     $commentService = new \App\CommentService\Comment();
+        //     foreach ($posts as &$post) {
+        //         $post['comments'] = $commentService->getAll($post['post_id']);
+        //     }
+        //     return $posts;
+        // } catch (Exception $e) {
+        //     return [];
+        // }
     }
 }

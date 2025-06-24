@@ -82,7 +82,7 @@ class FriendShip
     {
         return $this->reject($id);
     }
-    }
+    
 
     public function getAllFriendRequest()
     {
