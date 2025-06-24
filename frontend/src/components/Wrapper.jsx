@@ -5,7 +5,8 @@ const Wrapper = ({ children }) => {
   return (
     <main>
       <NavBar />
-      <div className='min-h-[100vh] bg-slate-100  w-[70%] mt-10 mx-auto'>
+      <div className='min-h-[100vh]   w-[50%] mx-auto p-2'>
+        <div className='mt-20'></div>
         { children }
       </div>
     </main>

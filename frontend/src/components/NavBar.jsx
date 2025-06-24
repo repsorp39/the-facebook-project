@@ -54,7 +54,7 @@ const NavBar = () => {
       </section>
       <section className='w-1/3'>
         <ul className='flex items-center gap-4 justify-between'>
-          {items.map((item,index) => {
+          {items.map((item, index) => {
             return (
               <>
                 <li
@@ -63,9 +63,12 @@ const NavBar = () => {
                     pathname === item.path ? "activeLink" : ""
                   }`}
                 >
-                  <NavLink to={item.path} className='h-full w-full' key={index} 
-                  id={item.label}
-                   >
+                  <NavLink
+                    to={item.path}
+                    className='h-full w-full'
+                    key={index}
+                    id={item.label}
+                  >
                     {item.icon}
                   </NavLink>
                 </li>
@@ -76,8 +79,11 @@ const NavBar = () => {
         </ul>
       </section>
 
-      <section className='flex items-center content-center cursor-pointer' onClick={()=>navigate(`/profile/${user.userid}`) }>
-        <figure className='image is-48x48' >
+      <section
+        className='flex items-center content-center cursor-pointer'
+        onClick={() => navigate(`/profile/${user.userid}`)}
+      >
+        <figure className='image is-48x48'>
           <img className='is-rounded' src={user.picture} alt='' />
         </figure>
         <div>
