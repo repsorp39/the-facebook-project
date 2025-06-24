@@ -16,6 +16,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     if(!$id) return JSON::serve(400,["message"=>"id requis"]);
 
     $Friendship  = new FriendShip($userid);
-    $Friendship->confirmRequestFrom($id);
-    JSON::serve(200,["message" => "Amitié confirmée"]);
+    $success = $Friendship->confirmRequestFrom($id);
+   if($success) JSON::serve(200,["message" => "Amitié confirmée"]);
+   else JSON::serve(500,['message'=>"Some errors occurs"]);
 }
