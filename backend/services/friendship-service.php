@@ -34,7 +34,14 @@ class FriendShip{
     }
 
     public function getFriendshipList(){
-
+        // On suppose une table friendships avec user_id et friend_id, et un statut accepté
+        $sql = "SELECT user_id2 AS friend_id FROM friendship WHERE user_id1 = :userid AND state = 'accepted'
+                UNION
+                SELECT user_id1 AS friend_id FROM friendship WHERE user_id2 = :userid AND state = 'accepted'";
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute([':userid' => $this->userid]);
+        $friends = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        return $friends;
     }
 
     public function getAllFriendRequest(){

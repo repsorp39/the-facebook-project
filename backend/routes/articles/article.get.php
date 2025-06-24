@@ -1,11 +1,18 @@
 <?php
 require_once __DIR__ . '/../../services/posts-service.php';
 require_once __DIR__ . '/../../utils/serve-json.php';
+require_once __DIR__ . '/../../utils/chech-token.php';
 
 use App\PostService\Post;
 use App\JSON\JSON;
 
 header('Content-Type: application/json');
+
+$userid = decodeTokenFromHeader();
+if(!$userid) {
+    JSON::serve(401, ['error' => 'Not allowed!']);
+    exit;
+}
 
 try {
     $postService = new Post();

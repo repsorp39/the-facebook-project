@@ -4,6 +4,7 @@ session_start();
 require_once("../../utils/serve-json.php");
 require_once("../../services/posts-service.php");
 require_once("../../utils/handle-upload.php");
+require_once("../../utils/chech-token.php");
 
 use App\JSON\JSON;
 use App\PostService\Post;
@@ -16,8 +17,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         
         // Vérification de l'authentification 
        
-        $user_id = $_SESSION['user_id'] ?? null;
-        
+        $user_id = decodeTokenFromHeader();
         if(!$user_id) {
             return JSON::serve(401, ["message" => "Utilisateur non authentifié"]);
         }
