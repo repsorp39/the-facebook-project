@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../services/posts-service.php';
 require_once __DIR__ . '/../../utils/serve-json.php';
 require_once __DIR__ . '/../../utils/chech-token.php';
+require_once("../../config/cors.php");
 
 use App\PostService\Post;
 use App\JSON\JSON;
@@ -9,6 +10,7 @@ use App\JSON\JSON;
 header('Content-Type: application/json');
 
 $userid = decodeTokenFromHeader();
+echo $userid;
 if(!$userid) {
     JSON::serve(401, ['error' => 'Not allowed!']);
     exit;

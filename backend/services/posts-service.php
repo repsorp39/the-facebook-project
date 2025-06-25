@@ -2,7 +2,7 @@
 
 namespace App\PostService;
 
-require_once("../../database/db.php");
+require_once(__DIR__ . '/../database/db.php');
 
 use Exception;
 use PDO;
@@ -150,6 +150,30 @@ class Post
             return $posts;
         } catch (Exception $e) {
             return [];
+        }
+    }
+
+    public function like($post_id, $user_id): bool
+    {
+        try {
+            $sql = "INSERT IGNORE INTO `like` (post_id, user_id) VALUES (:post_id, :user_id)";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([':post_id' => $post_id, ':user_id' => $user_id]);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function dislike($post_id, $user_id): bool
+    {
+        try {
+            $sql = "DELETE FROM `like` WHERE post_id = :post_id AND user_id = :user_id";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([':post_id' => $post_id, ':user_id' => $user_id]);
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 }

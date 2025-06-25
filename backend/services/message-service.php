@@ -1,6 +1,6 @@
 <?php
 namespace App\MessageService;
-require_once("../database/db.php");
+require_once(__DIR__ . '/../database/db.php');
 
 class Message{
     private $bdd;

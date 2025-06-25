@@ -4,7 +4,21 @@ require_once("../../config/cors.php");
 
 
 function decodeTokenFromHeader(){
-    $token =  substr($_SERVER['HTTP_AUTHORIZATION'] ?? '',7);//since it's a bearer token
+    var_dump($_SERVER['HTTP_AUTHORIZATION'] ?? null);
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        var_dump($headers['Authorization'] ?? null);
+    }
+
+    $token = '';
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        $token = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
+    } elseif (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $token = substr($headers['Authorization'], 7);
+        }
+    }
     $userid = jwtDecode($token,"user_id");
     return $userid;
 }

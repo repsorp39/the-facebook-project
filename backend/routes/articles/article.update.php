@@ -22,7 +22,7 @@ if (!$input || !isset($input['post_id'], $input['user_id'], $input['description'
     exit;
 }
 
-// On peut aussi vérifier que $input['user_id'] == $userid pour plus de sécurité
+
 if ($input['user_id'] != $userid) {
     JSON::serve(403, ['error' => 'Unauthorized user']);
     exit;

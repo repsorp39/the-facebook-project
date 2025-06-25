@@ -3,7 +3,7 @@ namespace App\UserService;
 
 use PDOException;
 
-require_once("../../database/db.php");
+require_once(__DIR__ . '/../database/db.php');
 
 class User {
     private $bdd;
