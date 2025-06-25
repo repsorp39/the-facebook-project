@@ -24,6 +24,7 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
+import PostDescription from "./PostDescription";
 
 const SingleArticle = ({ post }) => {
   const navigate = useNavigate();
@@ -150,9 +151,7 @@ const SingleArticle = ({ post }) => {
       {/* Description */}
       {!isEditing ? (
         post.description && (
-          <section className='px-4 pb-2 text-gray-700 text-sm leading-relaxed'>
-            {post.description}
-          </section>
+          <PostDescription description={post.description} />
         )
       ) : (
         <div className='flex items-end content-center'>
