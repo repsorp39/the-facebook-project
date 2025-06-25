@@ -4,10 +4,10 @@ namespace App\EmailService;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require("../../modules/PHPMailer-master/src/Exception.php");
-require("../../modules/PHPMailer-master/src/PHPMailer.php");
-require("../../modules/PHPMailer-master/src/SMTP.php");
-require("../../utils/email-template.php");
+require_once(__DIR__ . '/../modules/PHPMailer-master/src/Exception.php');
+require_once(__DIR__ . '/../modules/PHPMailer-master/src/PHPMailer.php');
+require_once(__DIR__ . '/../modules/PHPMailer-master/src/SMTP.php');
+require_once(__DIR__ . '/../utils/email-template.php');
 
 class Email {
     public static function send ($user,$secret,$type){

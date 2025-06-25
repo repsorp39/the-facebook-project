@@ -17,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         JSON::serve(401, ['error' => 'Not allowed!']);
         exit;
     }
-
+  
     if (!$input || !isset($input['post_id'],  $input['description'])) {
         JSON::serve(400, ['error' => 'Missing required fields']);
         exit;

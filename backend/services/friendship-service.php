@@ -1,10 +1,9 @@
 <?php
 
 namespace App\FriendShipService;
+require_once(__DIR__ . '/../database/db.php');
 
 use Exception;
-
-require_once("../../database/db.php");
 
 class FriendShip
 {
@@ -82,14 +81,17 @@ class FriendShip
     {
         return $this->reject($id);
     }
-    
 
     public function getAllFriendRequest()
     {
         try {
-            $query = "SELECT id,firstname,lastname,picture 
-            FROM users WHERE id 
-            IN ( SELECT user_id1  FROM friendship WHERE user_id2 = ? AND state='waiting')";
+            $query = "SELECT id, firstname, lastname, picture 
+                      FROM users 
+                      WHERE id IN (
+                          SELECT user_id1  
+                          FROM friendship 
+                          WHERE user_id2 = ? AND state = 'waiting'
+                      )";
             $stmt = $this->bdd->prepare($query);
             $stmt->execute([$this->userid]);
             return $stmt->fetchAll();

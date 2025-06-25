@@ -1,9 +1,8 @@
 <?php
 namespace App\CommentService;
+require_once(__DIR__ . '/../database/db.php');
 
 use Exception;
-
-require_once("../../database/db.php");
 
 class Comment{
     private $bdd;
