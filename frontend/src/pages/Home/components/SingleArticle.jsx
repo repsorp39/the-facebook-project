@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  deletePost,
-  updatePost,
-} from "../../../store/features/posts-slice";
+import toast from "react-hot-toast";
+import ContextMenu from "./ContextMenu";
+import axios from "../../../config/axios-config";
+import { timeAgo } from "../../../utils";
+import NewComment from "./NewComment";
+import Comments from "./Comments";
+import ImageRounded from "../../../components/ImageRounded";
+
+import { deletePost, updatePost } from "../../../store/features/posts-slice";
 
 import {
+  ChevronsDownUp,
   Forward,
   Heart,
   MessageCircle,
@@ -14,18 +20,20 @@ import {
   X,
 } from "lucide-react";
 
-import toast from "react-hot-toast";
-import ContextMenu from "./ContextMenu";
-import axios from "../../../config/axios-config";
-import { timeAgo } from "../../../utils";
-
 const SingleArticle = ({ post }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isEditing, setEditing] = useState(false);
-  const [inputContent, setInputContent] = useState(post.description);
   const user = useSelector((state) => state.auth.userinfo);
+
+  const [isEditing, setEditing] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
+  const [showCommentaires, setShowCommentaires] = useState(false);
+
+  const [inputContent, setInputContent] = useState(post.description);
+  const [hasLikedPost, setHasLikedPost] = useState(
+    post?.like?.includes?.(user.userid)
+  );
 
   function handleClose(id) {
     dispatch(deletePost(id));
@@ -65,32 +73,42 @@ const SingleArticle = ({ post }) => {
       toast.success("Article modifié avec succès");
       setEditing(false);
       //on met juste le post en question à jour ici por ne plus fetcher à nouveau la bdd
-      dispatch((updatePost(data)));
+      dispatch(updatePost(data));
     } catch (error) {
-      console.log(error);
-
       toast.error("Une erreur est survenue lors de l'édition.");
     }
   }
 
+  async function handleReaction(type = "like") {
+    if (type === "like") {
+       setHasLikedPost(true)
+       toast.success("Super",{
+        icon:'🎉',
+        duration:3000
+       });
+    }
+    else setHasLikedPost(false);
+  }
+
   return (
-    <article className='w-full max-w-2xl mx-auto bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg mb-5'>
+    <article
+      className={`w-full max-w-2xl mx-auto bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg mb-5 }`}
+    >
       {/* Header */}
       <section className='flex items-start justify-between p-4'>
         <div
           className='flex items-center gap-3 cursor-pointer group'
           onClick={() => navigate(`/profile/${post.user_id}`)}
         >
-          <img
-            src={post.user_picture}
-            alt=''
-            className='w-12 h-12 rounded-full object-cover border border-gray-300 group-hover:scale-105 transition'
-          />
+          <ImageRounded imgUrl={post.user_picture} />
           <div>
             <p className='text-gray-800 font-semibold text-[15px]'>
               {post.firstname} {post.lastname}
             </p>
-            <p className='text-gray-500 text-xs'> { timeAgo(post.created_at)} </p>
+            <p className='text-gray-500 text-xs'>
+              {" "}
+              {timeAgo(post.created_at)}{" "}
+            </p>
           </div>
         </div>
 
@@ -162,19 +180,61 @@ const SingleArticle = ({ post }) => {
             <Heart className='text-pink-600 w-5 h-5' />
             <ThumbsUp className='text-blue-600 w-5 h-5 absolute left-3 top-0' />
           </div>
-          <span className='ml-6'>10</span>
+          <span className='ml-4'> {post.likes} </span>
+        </div>
+        <div>
+          <p
+            className='cursor-pointer hover:underline-offset-1 hover:underline transition text-gray-500 font-semibold'
+            onClick={() => setShowCommentaires(true)}
+          >
+            Commentaires ({post.comments.length}){" "}
+          </p>
         </div>
       </section>
 
-      <hr className='my-3 border-gray-200' />
+      <section className='relative'>
+        {(showCommentaires || isCommenting) && (
+          <span
+            className='absolute top-10 left-3 w-4 h-2 m-t-3 cursor-pointer text-gray-400 hover:text-gray-500 transition'
+            title='Fermer'
+            onClick={() => {
+              setIsCommenting(false);
+              setShowCommentaires(false);
+            }}
+          >
+            {" "}
+            <ChevronsDownUp />{" "}
+          </span>
+        )}
+        {showCommentaires && <Comments comments={post.comments} />}
 
+        {isCommenting && (
+          <NewComment
+            postid={post.post_id}
+            hideCommentForm={() => setIsCommenting(false)}
+          />
+        )}
+      </section>
+
+      <hr className='my-3 border-gray-200' />
       {/* Footer actions */}
       <section className='px-4 pb-4 flex justify-around text-gray-600 text-sm'>
-        <button className='flex items-center gap-2 hover:text-pink-600 transition'>
-          <Heart className='w-4 h-4' />
+        <button
+          className={`flex items-center gap-2 transition ${
+            hasLikedPost ? "text-pink-600" : ""
+          } `}
+          onClick={() => handleReaction(hasLikedPost ? "dislike" : "like")}
+        >
+          <Heart className='w-4 h-4 ${hasLikedPost ? "text-pink-600":""}' fill="currentColor" />
           <span>J'aime</span>
         </button>
-        <button className='flex items-center gap-2 hover:text-blue-500 transition'>
+        <button
+          className='flex items-center gap-2 hover:text-blue-500 transition'
+          onClick={() => {
+            setIsCommenting(true);
+            setShowCommentaires(true);
+          }}
+        >
           <MessageCircle className='w-4 h-4' />
           <span>Commenter</span>
         </button>

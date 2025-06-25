@@ -9,7 +9,11 @@ const initialState = {
 
 const fetchPosts = createAsyncThunk("posts/fetch/",async (postid = "")=>{
  try {
-    const res = await axios.get(`/articles/article.get.php/?id=${postid}`);
+    const res = await axios.get(`/articles/article.get.php/?id=${postid}`,{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
     return res.data;
  } catch (error) {
     throw new Error(error.response.data.message);

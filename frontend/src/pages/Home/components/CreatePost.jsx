@@ -4,9 +4,10 @@ import { Images, X } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "../../../config/axios-config";
 import { fetchPosts } from "../../../store/features/posts-slice";
+import ImageRounded from "../../../components/ImageRounded";
 
 
-const Banner = () => {
+const CreatePost = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.userinfo);
@@ -62,11 +63,7 @@ const Banner = () => {
     <section className="flex gap-4">
       {/* Avatar */}
       <div className="shrink-0">
-        <img
-          src={user.picture}
-          alt=""
-          className="w-12 h-12 rounded-full object-cover border"
-        />
+        <ImageRounded imgUrl={user.picture} />
       </div>
   
       {/* Zone de texte */}
@@ -137,4 +134,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default CreatePost;

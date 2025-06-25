@@ -1,5 +1,8 @@
 <?php
 namespace App\CommentService;
+
+use Exception;
+
 require_once("../../database/db.php");
 
 class Comment{
@@ -11,28 +14,53 @@ class Comment{
 
     public function create(array $comment){
         try {
-            $sql = "INSERT INTO comments VALUES (NULL,:user_id,:content,:post_id,NULL)";
+            $sql = "INSERT INTO comments (user_id,content,post_id) VALUES (:user_id,:content,:post_id)";
             $stmt = $this->bdd->prepare($sql);
-            $stmt->execute([
-                "user_id" => $comment["user_id"]
+            $state = $stmt->execute([
+                "user_id" => $comment["user_id"],
+                "content" => $comment["content"],
+                "post_id" => $comment["post_id"],
             ]);
+            return $state;
         } catch (\Exception $e) {
-            return [];
+            echo $e->getMessage();
+            return false;
         }
     }
 
     public function delete(string $commentid):bool{
-
-        return true;
+        try {
+            $sql = "DELETE FROM comments WHERE comment_id = ?";
+            $stmt = $this->bdd->prepare($sql);
+           return  $stmt->execute([$commentid]);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
     public function update(array $comment):bool{
         return true;
     }
 
+    public function getById(string $commentid){
+        try {
+            $sql = "SELECT * FROM comments WHERE comment_id = ?";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([$commentid]);
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function getAll(string $postid):array{
         try {
-            $sql = "SELECT * FROM comments WHERE post_id = :post_id ORDER BY created_at ASC";
+            $sql = "SELECT c.*, u.firstname, u.lastname, u.picture as user_picture 
+                    FROM comments c 
+                    JOIN users u ON c.user_id = u.id 
+                    WHERE c.post_id = :post_id
+                    ORDER BY c.comment_id DESC";
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute([':post_id' => $postid]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);

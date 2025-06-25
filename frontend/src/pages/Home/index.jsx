@@ -1,14 +1,12 @@
 import React from 'react';
-import SideBar from '../../components/SideBar';
 import Wrapper from '../../components/Wrapper';
-import TopBar from '../../components/TopBar';
-import Banner from './components/Banner';
 import Article from './components/Article';
+import CreatePost from './components/CreatePost';
 
 function Home() {
   return (
       <Wrapper>
-            <Banner />
+            <CreatePost />
             <Article />
       </Wrapper>
   );
