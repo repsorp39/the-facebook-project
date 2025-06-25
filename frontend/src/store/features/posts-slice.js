@@ -1,5 +1,5 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
-import axios from "../../config/axios-config";
+import getAxiosInstance from "../../config/axios-config";
 
 const initialState = { 
   posts:[],
@@ -9,11 +9,8 @@ const initialState = {
 
 const fetchPosts = createAsyncThunk("posts/fetch/",async (postid = "")=>{
  try {
-    const res = await axios.get(`/articles/article.get.php/?id=${postid}`,{
-      headers:{
-        Authorization:`Bearer ${localStorage.getItem("token")}`
-      }
-    });
+    const http = getAxiosInstance();
+    const res = await http.get(`/articles/article.get.php/?id=${postid}`);
     return res.data;
  } catch (error) {
     throw new Error(error.response.data.message);
@@ -21,14 +18,6 @@ const fetchPosts = createAsyncThunk("posts/fetch/",async (postid = "")=>{
 });
 
 
-// const updatePosts = createAsyncThunk("posts/update/", async (post) =>{
-//   try {
-//     const res = await axios.post("/articles/article.update.php",post);
-//     return res.data;
-//  } catch (error) {
-//     throw new Error(error.response.data.message);
-//  }
-// });
 
 const postsReducer = createSlice({
   name:"posts",
@@ -37,10 +26,22 @@ const postsReducer = createSlice({
     delete(state,{payload}){
       state.posts = state.posts.filter((p) => p.post_id !== payload)
     },
+
     update(state,{ payload }){
       const index = state.posts.findIndex((post) => post.post_id === payload.post_id);
       state.posts[index] = payload;
+    },
+
+    like(state,{ payload }){
+      const index = state.posts.findIndex((post) => post.post_id === payload.post_id);
+      state.posts[index].likes.push(payload.userid);
+    },
+
+    dislike(state,{ payload }){
+      const index = state.posts.findIndex((post) => post.post_id === payload.post_id);
+      state.posts[index].likes = state.posts[index].likes.filter((id) => id !== payload.userid );
     }
+
   },
   extraReducers:(builder)=>{
     builder.addCase(fetchPosts.fulfilled,(state,action) =>{
@@ -57,4 +58,6 @@ const postsReducer = createSlice({
 export default postsReducer.reducer;
 export const deletePost = postsReducer.actions.delete;
 export const updatePost = postsReducer.actions.update;
+export const likePost = postsReducer.actions.like;
+export const dislikePost = postsReducer.actions.dislike;
 export { fetchPosts };

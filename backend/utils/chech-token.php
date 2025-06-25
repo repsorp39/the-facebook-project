@@ -4,12 +4,6 @@ require_once("../../config/cors.php");
 
 
 function decodeTokenFromHeader(){
-    var_dump($_SERVER['HTTP_AUTHORIZATION'] ?? null);
-    if (function_exists('apache_request_headers')) {
-        $headers = apache_request_headers();
-        var_dump($headers['Authorization'] ?? null);
-    }
-
     $token = '';
     if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
         $token = substr($_SERVER['HTTP_AUTHORIZATION'], 7);

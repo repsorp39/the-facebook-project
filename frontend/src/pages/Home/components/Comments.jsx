@@ -2,17 +2,18 @@ import React from "react";
 import { Frown, Trash2Icon } from "lucide-react";
 import { timeAgo } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "../../../config/axios-config";
+import getAxiosInstance from "../../../config/axios-config";
 import toast from "react-hot-toast";
 import { fetchPosts } from "../../../store/features/posts-slice";
 
 const Comments = ({ comments }) => {
   const userid = useSelector((state) => state.auth.userinfo.userid);
   const dipatch = useDispatch();
+  const http = getAxiosInstance();
 
   async function handleDelete(id) {
     try {
-      const res = await axios.delete(`/comments/comments.delete.php?comment_id=${id}`);
+      const res = await http.delete(`/comments/comments.delete.php?comment_id=${id}`);
       dipatch(fetchPosts());
       toast.success("Commentaire supprimé");
     } catch (err) {

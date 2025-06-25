@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../config/axios-config";
+import getAxiosInstance from "../../config/axios-config";
 
 const initialState = {
   isLoggedIn:false,
@@ -15,7 +15,8 @@ const initialState = {
 const fetchUser =  createAsyncThunk("/user/info",async ()=>{
   try {
     //erase the default axios config 
-    const { data:user }= await axios.get("/users/user.get.php", {
+    const http = getAxiosInstance();
+    const { data:user }= await http.get("/users/user.get.php", {
       headers:{ 
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -39,7 +40,8 @@ const fetchUser =  createAsyncThunk("/user/info",async ()=>{
 
 const loginUser = createAsyncThunk("/user/login",async(credentials,thunk) => {
   try {
-    const { data } = await axios.post("/users/user.login.php",credentials);
+    const http = getAxiosInstance();
+    const { data } = await http.post("/users/user.login.php",credentials);
     localStorage.setItem("token",data.token);
     await thunk.dispatch(fetchUser(credentials)).unwrap();
     return data.token;
@@ -50,7 +52,8 @@ const loginUser = createAsyncThunk("/user/login",async(credentials,thunk) => {
 
 const registerUser = createAsyncThunk("/user/register",async (credentials,thunk)=>{
   try {
-    await axios.post("/users/user.create.php",credentials);
+    const http = getAxiosInstance();
+    await http.post("/users/user.create.php",credentials);
   } catch (error) {
       throw new Error(error.response.data.message);
   }
@@ -59,7 +62,8 @@ const registerUser = createAsyncThunk("/user/register",async (credentials,thunk)
 
 const logoutUser = createAsyncThunk("/user/logout",async ()=>{
   try {
-    await axios.delete("/users/user.logout.php");
+    const http = getAxiosInstance();
+    await http.delete("/users/user.logout.php");
     localStorage.setItem("token","");
   } catch (error) {
       throw new Error(error.response.data.message);

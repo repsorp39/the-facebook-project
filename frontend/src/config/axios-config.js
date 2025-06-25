@@ -1,8 +1,17 @@
 import axios from "axios";
 
-export default  axios.create({
-  baseURL:"http://localhost:8080/routes/",
-  headers:{
-    Authorization:`Bearer ${localStorage.getItem("token")}`
+let axiosInstance = null;
+function getAxiosInstance(){
+  if(!axiosInstance){
+    return axios.create({
+      baseURL:"http://localhost:8080/routes/",
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    })
+  }else{
+    return axiosInstance;
   }
-})
+}
+
+export default getAxiosInstance;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "../../../config/axios-config";
+import getAxiosInstance from "../../../config/axios-config";
 import { fetchPosts } from "../../../store/features/posts-slice";
 
 const CommentCreation = ({ postid, hideCommentForm }) => {
@@ -15,10 +15,10 @@ const CommentCreation = ({ postid, hideCommentForm }) => {
       const formData = new FormData();
       formData.append("post_id", postid);
       formData.append("content", comment);
-      const res = await axios.post("/comments/comments.create.php", formData);
+      const http = getAxiosInstance();
+      const res = await http.post("/comments/comments.create.php", formData);
       dispatch(fetchPosts());
       toast.success("Commentaire ajouté");
-      
     } catch (error) {
       console.log(error);
       toast.error("Une erreur est survenue lors de l'ajout du commentaire");

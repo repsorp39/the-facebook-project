@@ -3,13 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ContextMenu from "./ContextMenu";
-import axios from "../../../config/axios-config";
+import getAxiosInstance from "../../../config/axios-config";
 import { timeAgo } from "../../../utils";
 import NewComment from "./NewComment";
 import Comments from "./Comments";
 import ImageRounded from "../../../components/ImageRounded";
 
-import { deletePost, updatePost } from "../../../store/features/posts-slice";
+import {
+   deletePost, 
+   dislikePost, 
+   likePost, 
+   updatePost
+} from "../../../store/features/posts-slice";
 
 import {
   ChevronsDownUp,
@@ -23,6 +28,7 @@ import {
 const SingleArticle = ({ post }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const http = getAxiosInstance();
 
   const user = useSelector((state) => state.auth.userinfo);
 
@@ -32,19 +38,19 @@ const SingleArticle = ({ post }) => {
 
   const [inputContent, setInputContent] = useState(post.description);
   const [hasLikedPost, setHasLikedPost] = useState(
-    post?.like?.includes?.(user.userid)
+    post?.likes?.includes?.(user.userid)
   );
 
   function handleClose(id) {
     dispatch(deletePost(id));
     toast.success(
-      "Vous avez retiré ce post de votre fil. Mais vous pourriez le voir ailleurs."
+      "Vous avez retiré ce post de votre fil. Mais vous pourriez le voir ailleurs.",{duration:3000}
     );
   }
 
   async function handleDelete(id) {
     try {
-      const res = await axios.delete(
+      await http.delete(
         `/articles/article.delete.php?post_id=${id}`
       );
       //lui il retire seulement du fil actuellement pour éviter des requetes pour recuperer
@@ -65,11 +71,10 @@ const SingleArticle = ({ post }) => {
         description: inputContent,
       };
 
-      Object.keys(data).map((key) => {
+      Object.keys(data).forEach((key) => {
         formData.append(key, data[key]);
       });
-
-      const res = await axios.post("/articles/article.update.php", formData);
+      const res = await http.post("/articles/article.update.php", formData);
       toast.success("Article modifié avec succès");
       setEditing(false);
       //on met juste le post en question à jour ici por ne plus fetcher à nouveau la bdd
@@ -80,14 +85,27 @@ const SingleArticle = ({ post }) => {
   }
 
   async function handleReaction(type = "like") {
-    if (type === "like") {
-       setHasLikedPost(true)
-       toast.success("Super",{
-        icon:'🎉',
-        duration:3000
-       });
+    try {
+      if (type === "like") {
+        setHasLikedPost(true);
+        const formData = new FormData();
+        formData.append("post_id",post.post_id);
+        await http.post(`/articles/article.like.php/`,formData);
+        toast.success("Super",{
+         icon:'🎉',
+         duration:3000
+        });
+        dispatch(likePost({userid:user.userid,post_id:post.post_id}));
+     }
+     else {
+      setHasLikedPost(false);
+      await http.delete(`/articles/article.like.php?post_id=${post.post_id}`);
+      dispatch(dislikePost({userid:user.userid,post_id:post.post_id})); 
+     }
+    } catch (error) {
+      console.log(error);
+      toast.error("Une erreur est survenue!");
     }
-    else setHasLikedPost(false);
   }
 
   return (
@@ -180,7 +198,7 @@ const SingleArticle = ({ post }) => {
             <Heart className='text-pink-600 w-5 h-5' />
             <ThumbsUp className='text-blue-600 w-5 h-5 absolute left-3 top-0' />
           </div>
-          <span className='ml-4'> {post.likes} </span>
+          <span className='ml-4'> {post.likes.length} </span>
         </div>
         <div>
           <p

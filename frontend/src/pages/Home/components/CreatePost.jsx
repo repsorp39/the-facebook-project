@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Images, X } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "../../../config/axios-config";
+import getAxiosInstance from "../../../config/axios-config";
 import { fetchPosts } from "../../../store/features/posts-slice";
 import ImageRounded from "../../../components/ImageRounded";
 
@@ -27,7 +27,8 @@ const CreatePost = () => {
 
       formData.append("type", media.type ?? "text");
       formData.append("description", inputContent);
-      const res = await axios.post("/articles/article.create.php", formData);
+      const http = getAxiosInstance();
+      const res = await http.post("/articles/article.create.php", formData);
       toast.success("Article publiée avec succès");
       dispatch(fetchPosts());
     } catch (err) {
