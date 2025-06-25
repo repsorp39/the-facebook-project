@@ -3,6 +3,8 @@
 namespace App\PostService;
 
 require_once(__DIR__ . '/../database/db.php');
+require("../../services/friendship-service.php");
+
 
 use Exception;
 use PDO;
@@ -74,11 +76,21 @@ class Post
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute();
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // Ajout des commentaires pour chaque post
             require_once __DIR__ . '/comments-service.php';
             $commentService = new \App\CommentService\Comment();
             foreach ($posts as &$post) {
-                $post['comments'] = $commentService->getAll($post['post_id']);
+                // Récupérer les likes
+                $likeStmt = $this->bdd->prepare("SELECT user_id FROM `like` WHERE post_id = ?");
+                $likeStmt->execute([$post['post_id']]);
+                $post['likes'] = $likeStmt->fetchAll(PDO::FETCH_COLUMN);
+                // Récupérer les commentaires enrichis
+                $comments = $commentService->getAll($post['post_id']);
+                foreach ($comments as &$comment) {
+                    $userStmt = $this->bdd->prepare("SELECT id, firstname, lastname, picture FROM users WHERE id = ?");
+                    $userStmt->execute([$comment['user_id']]);
+                    $comment['user'] = $userStmt->fetch(PDO::FETCH_ASSOC);
+                }
+                $post['comments'] = $comments;
             }
             return $posts;
         } catch (Exception $e) {
@@ -97,9 +109,20 @@ class Post
             $stmt->execute([':post_id' => $postid]);
             $post = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($post) {
+                // Récupérer les likes
+                $likeStmt = $this->bdd->prepare("SELECT user_id FROM `like` WHERE post_id = ?");
+                $likeStmt->execute([$post['post_id']]);
+                $post['likes'] = $likeStmt->fetchAll(PDO::FETCH_COLUMN);
+                // Récupérer les commentaires enrichis
                 require_once __DIR__ . '/comments-service.php';
                 $commentService = new \App\CommentService\Comment();
-                $post['comments'] = $commentService->getAll($postid);
+                $comments = $commentService->getAll($postid);
+                foreach ($comments as &$comment) {
+                    $userStmt = $this->bdd->prepare("SELECT id, firstname, lastname, picture FROM users WHERE id = ?");
+                    $userStmt->execute([$comment['user_id']]);
+                    $comment['user'] = $userStmt->fetch(PDO::FETCH_ASSOC);
+                }
+                $post['comments'] = $comments;
             }
             return $post ? $post : [];
         } catch (Exception $e) {
@@ -122,36 +145,7 @@ class Post
         }
     }
 
-    public function getFriendsPosts(string $userid): array
-    {
-        try {
-            require_once __DIR__ . '/friendship-service.php';
-            $friendshipService = new \App\FriendShipService\FriendShip($userid);
-            $friends = $friendshipService->getFriendshipList();
-            if (empty($friends)) {
-                return [];
-            }
-            // Préparer la liste des ids pour la requête SQL
-            $in  = str_repeat('?,', count($friends) - 1) . '?';
-            $sql = "SELECT p.*, u.firstname, u.lastname, u.picture as user_picture 
-                    FROM posts p 
-                    JOIN users u ON p.user_id = u.id 
-                    WHERE p.user_id IN ($in)
-                    ORDER BY p.post_id DESC";
-            $stmt = $this->bdd->prepare($sql);
-            $stmt->execute($friends);
-            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // Ajout des commentaires pour chaque post
-            require_once __DIR__ . '/comments-service.php';
-            $commentService = new \App\CommentService\Comment();
-            foreach ($posts as &$post) {
-                $post['comments'] = $commentService->getAll($post['post_id']);
-            }
-            return $posts;
-        } catch (Exception $e) {
-            return [];
-        }
-    }
+    
 
     public function like($post_id, $user_id): bool
     {

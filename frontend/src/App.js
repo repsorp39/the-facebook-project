@@ -16,7 +16,7 @@ import Profil from './pages/Profil';
 function App() {
 
   const isLoading = useSelector((state) => state.auth.isLoading);
-  if(isLoading) return <div></div>
+  if(isLoading) return <div></div>;
   return (
     <>
       <Router>
