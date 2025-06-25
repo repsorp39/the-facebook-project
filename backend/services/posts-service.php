@@ -50,14 +50,14 @@ class Post
     public function update(array $post): bool
     {
         try {
-            $sql = "UPDATE posts SET description = :description, illustration = :illustration, type = :type WHERE post_id = :post_id AND user_id = :user_id";
+            $sql = "UPDATE posts SET description = :description, content = :content, type = :type WHERE post_id = :post_id";
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute([
-                ':description' => $post['description'],
-                ':illustration' => $post['illustration'] ?? '',
-                ':type' => $post['type'] ?? 'text',
-                ':post_id' => $post['post_id'],
-                ':user_id' => $post['user_id']
+                'description' => $post['description'],
+                'content' => $post['content'] ?? '',
+                'type' => $post['type'] ?? 'text',
+                'post_id' => $post['post_id'],
+                // 'user_id' => $post['user_id']
             ]);
             return true;
         } catch (Exception $e) {
@@ -66,7 +66,7 @@ class Post
     }
 
     //do not forget to send with comments if it available
-    public function getAll(string $userid): array
+    public function getAll(): array
     {
         try {
             $sql = "SELECT p.*, u.firstname, u.lastname, u.picture as user_picture 
@@ -106,7 +106,7 @@ class Post
                     JOIN users u ON p.user_id = u.id 
                     WHERE p.post_id = :post_id";
             $stmt = $this->bdd->prepare($sql);
-            $stmt->execute([':post_id' => $postid]);
+            $stmt->execute(['post_id' => $postid]);
             $post = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($post) {
                 // Récupérer les likes
@@ -145,9 +145,7 @@ class Post
         }
     }
 
-    
-
-    public function like($post_id, $user_id): bool
+        public function like($post_id, $user_id): bool
     {
         try {
             $sql = "INSERT IGNORE INTO `like` (post_id, user_id) VALUES (:post_id, :user_id)";
@@ -169,5 +167,6 @@ class Post
         } catch (Exception $e) {
             return false;
         }
+
     }
 }

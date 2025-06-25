@@ -1,11 +1,13 @@
 import React from 'react';
-import SideBar from '../../components/SideBar';
 import Wrapper from '../../components/Wrapper';
-import TopBar from '../../components/TopBar';
+import Article from './components/Article';
+import CreatePost from './components/CreatePost';
 
 function Home() {
   return (
       <Wrapper>
+            <CreatePost />
+            <Article />
       </Wrapper>
   );
 }

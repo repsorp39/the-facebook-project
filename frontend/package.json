@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.10.0",
     "bulma": "^1.0.4",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.519.0",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",

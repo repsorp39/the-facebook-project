@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../../config/cors.php");
 
 require_once("../../utils/serve-json.php");
 require_once("../../services/posts-service.php");
@@ -23,7 +23,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         }
 
         // Validation des champs requis
-        if(empty($description)) {
+        if($type === "text" && empty($description)) {
             return JSON::serve(400, ["message" => "La description est requise"]);
         }
 
@@ -71,6 +71,4 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     } catch (Exception $e) {
         JSON::serve(500, ["message" => "Erreur serveur: " . $e->getMessage()]);
     }
-} else {
-    JSON::serve(405, ["message" => "Méthode non autorisée"]);
-}
+} 

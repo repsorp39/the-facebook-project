@@ -33,7 +33,7 @@ function App() {
               <Route path='/register' Component={Register}> </Route>
           </Routes>
       </Router>
-      <Toaster position='top-center' />
+      <Toaster position='top-right' />
     </>
   );
 }
