@@ -7,7 +7,7 @@ import { Inbox } from "lucide-react";
 const Article = () => {
   const dispatch = useDispatch();
 
-  const posts = [];
+  const posts = useSelector((state => state.posts.posts));
   const loading = useSelector((state) => state.posts.loading);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Article = () => {
 
   if (posts.length === 0)
     return (
-      <div className='w-full max-w-2xl mx-auto mt-5 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg mb-5 flex items-center justify-center gap-3 p-6 text-gray-500'>
+      <div className='w-full max-w-2xl mx-auto bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg mb-5 flex items-center justify-center gap-3 p-6 text-gray-500'>
         <Inbox className='w-6 h-6 text-gray-400' />
         <span className='text-sm font-medium'>Aucun post disponible</span>
       </div>
