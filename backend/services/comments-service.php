@@ -1,6 +1,6 @@
 <?php
 namespace App\CommentService;
-require_once("../database/db.php");
+require_once("../../database/db.php");
 
 class Comment{
     private $bdd;
@@ -9,9 +9,16 @@ class Comment{
         $this->bdd = database();
     }
 
-    public function create(array $comment):bool{
-        
-        return true;
+    public function create(array $comment){
+        try {
+            $sql = "INSERT INTO comments VALUES (NULL,:user_id,:content,:post_id,NULL)";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([
+                "user_id" => $comment["user_id"]
+            ]);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function delete(string $commentid):bool{

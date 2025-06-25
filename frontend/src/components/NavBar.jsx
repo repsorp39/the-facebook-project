@@ -45,78 +45,70 @@ const NavBar = () => {
   ];
   const pathname = useLocation().pathname;
   return (
-    <header className='flex justify-between items-center bg-slate-50 h-16 shadow-md fixed top-0 w-full z-20'>
-      <section className='flexitems-center'>
-        <div>
-          <img src={logo} className='w-44' alt='' />
-        </div>
-        <div></div>
-      </section>
-      <section className='w-1/3'>
-        <ul className='flex items-center gap-4 justify-between'>
-          {items.map((item, index) => {
-            return (
-              <>
-                <li
-                  key={item.label}
-                  className={`[&_svg]:text-black p-4 ${
-                    pathname === item.path ? "activeLink" : ""
-                  }`}
-                >
-                  <NavLink
-                    to={item.path}
-                    className='h-full w-full'
-                    key={index}
-                    id={item.label}
-                  >
-                    {item.icon}
-                  </NavLink>
-                </li>
-                <Tooltip anchorSelect={`#${item.label}`} content={item.label} />
-              </>
-            );
-          })}
-        </ul>
-      </section>
-
-      <section
-        className='flex items-center content-center cursor-pointer'
-        onClick={() => navigate(`/profile/${user.userid}`)}
-      >
-        <figure className='image is-48x48'>
-          <img className='is-rounded' src={user.picture} alt='' />
-        </figure>
-        <div>
-          <li id='more'>
-            <button>
-              <EllipsisVertical />
-            </button>
+    <header className="fixed top-0 w-full h-16 bg-white shadow-sm z-20 flex items-center justify-between px-6 border-b border-gray-200">
+    {/* Logo & Nav */}
+    <section className="flex items-center gap-6">
+      <img src={logo} alt="Logo" className="w-40 h-auto object-contain" />
+    </section>
+  
+    {/* Icônes de navigation */}
+    <section className="w-1/3">
+      <ul className="flex items-center justify-between gap-4">
+        {items.map((item, index) => (
+          <li key={item.label} className="relative">
+            <NavLink
+              to={item.path}
+              id={item.label}
+              className={`rounded-md hover:bg-gray-100 transition [&_svg]:w-5 [&_svg]:h-5 w-full ${
+                pathname === item.path ? "bg-blue-100 text-blue-600" : "text-gray-700"
+              }`}
+            >
+              {item.icon}
+            </NavLink>
+            <Tooltip anchorSelect={`#${item.label}`} content={item.label} />
           </li>
-          <Tooltip
-            anchorSelect='#more'
-            className='p-0 shadow-sm'
-            clickable={true}
-          >
-            <div className='w-[220px]  bg-slate-300 '>
-              <div>
-                <Link to='/settings' className='flex text-black gap-1 p-2 '>
-                  <Settings /> Paramètres
-                </Link>
-              </div>
-              <div>
-                <button
-                  onClick={() => dispatch(logoutUser())}
-                  className='flex w-full text-white gap-1 p-2 bg-red-600 hover:bg-red-500'
-                >
-                  <LogOutIcon /> Se déconnecter
-                </button>
-              </div>
-            </div>
-          </Tooltip>
-        </div>
-      </section>
-    </header>
-  );
+        ))}
+      </ul>
+    </section>
+  
+    {/* Profil utilisateur avec menu déroulant */}
+    <section
+      className="flex items-center gap-3 cursor-pointer"
+    >
+      <img
+        src={user.picture}
+        alt="Profil"
+        onClick={() => navigate(`/profile/${user.userid}`)}
+        className="w-10 h-10 rounded-full object-cover border"
+      />
+      <div className="relative">
+        <button id="more" className="p-2 rounded-full hover:bg-gray-100 transition">
+          <EllipsisVertical className="text-gray-600" />
+        </button>
+        <Tooltip
+          anchorSelect="#more"
+          clickable={true}
+          className="bg-white border rounded-md shadow-md overflow-hidden p-0"
+        >
+          <div className="w-56">
+            <Link
+              to="/settings"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+            >
+              <Settings className="w-4 h-4" /> Paramètres
+            </Link>
+            <button
+              onClick={() => dispatch(logoutUser())}
+              className="flex items-center gap-2 px-4 py-2 w-full text-sm text-white bg-red-600 hover:bg-red-500 transition"
+            >
+              <LogOutIcon className="w-4 h-4" /> Se déconnecter
+            </button>
+          </div>
+        </Tooltip>
+      </div>
+    </section>
+  </header>
+    );
 };
 
 export default NavBar;

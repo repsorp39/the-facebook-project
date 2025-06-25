@@ -117,4 +117,22 @@ class FriendShip
             return false;
         }
     }
+        public function getFriendshipList()
+    {
+        try {
+            $query = "SELECT id,firstname,lastname,picture 
+            FROM users WHERE id != :id AND 
+            id IN (
+                SELECT user_id2  FROM friendship WHERE user_id1 = :id AND state='friend'
+                UNION 
+                SELECT user_id1 FROM friendship  WHERE user_id2 = :id AND state='friend'
+            )";
+            $stmt = $this->bdd->prepare($query);
+            $stmt->execute(["id" => $this->userid]);
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }
