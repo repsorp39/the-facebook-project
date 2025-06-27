@@ -1,9 +1,14 @@
-import React from 'react';
+import React  from 'react';
 import Wrapper from '../../components/Wrapper';
+import ContactSideBar from './components/ContactSideBar';
+import { Outlet } from 'react-router-dom';
 
 const Contact = () => {
   return (
-    <Wrapper></Wrapper>
+    <Wrapper>
+      <ContactSideBar />
+      <Outlet />
+    </Wrapper>
   );
 };
 

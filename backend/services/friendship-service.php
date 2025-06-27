@@ -85,12 +85,13 @@ class FriendShip
     public function getAllFriendRequest()
     {
         try {
-            $query = "SELECT id, firstname, lastname, picture 
+            $query = "SELECT id, firstname, lastname, picture ,is_online
                       FROM users 
                       WHERE id IN (
                           SELECT user_id1  
                           FROM friendship 
                           WHERE user_id2 = ? AND state = 'waiting'
+                          ORDER BY created_at DESC
                       )";
             $stmt = $this->bdd->prepare($query);
             $stmt->execute([$this->userid]);
@@ -104,12 +105,13 @@ class FriendShip
     public function getAllPossibleRequestSent()
     {
         try {
-            $query = "SELECT id,firstname,lastname,picture 
+            $query = "SELECT id,firstname,lastname,picture ,is_online
             FROM users WHERE id != :id AND 
             id NOT IN (
                 SELECT user_id2 FROM friendship WHERE user_id1 = :id 
                 UNION 
                 SELECT user_id1 FROM friendship  WHERE user_id2 = :id 
+                ORDER BY created_at DESC
             )";
             $stmt = $this->bdd->prepare($query);
             $stmt->execute(["id" => $this->userid]);
@@ -122,7 +124,7 @@ class FriendShip
         public function getFriendshipList()
     {
         try {
-            $query = "SELECT id,firstname,lastname,picture 
+            $query = "SELECT id,firstname,lastname,picture ,is_online
             FROM users WHERE id != :id AND 
             id IN (
                 SELECT user_id2  FROM friendship WHERE user_id1 = :id AND state='friend'
