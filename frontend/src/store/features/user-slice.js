@@ -14,13 +14,8 @@ const initialState = {
 
 const fetchUser =  createAsyncThunk("/user/info",async ()=>{
   try {
-    //erase the default axios config 
     const http = getAxiosInstance();
-    const { data:user }= await http.get("/users/user.get.php", {
-      headers:{ 
-        Authorization:`Bearer ${localStorage.getItem("token")}`
-      }
-    });
+    const { data:user } = await http.get("/users/user.get.php");
     return {
       userid:user.id,
       firstname:user.firstname,

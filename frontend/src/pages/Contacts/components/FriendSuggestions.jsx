@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchFriendsSuggestions,
@@ -15,6 +15,7 @@ import ContactListWrapper from "./ContactWrapper";
 const FriendSuggestions = () => {
   const dispatch = useDispatch();
   const http = getAxiosInstance();
+  const ref = useRef(null);
 
   const friendsSuggestions = useSelector(friendsSuggestionsSelector);
   const [limit, setLimit] = useState(6);
@@ -47,8 +48,10 @@ const FriendSuggestions = () => {
   }
 
   return (
-    <>
-      <h1 className="text-xl font-bold mb-10">Vous connaissez-peut être ? ({friendsSuggestions.length}) </h1>
+    <section ref={ref}>
+      <h1 className='text-xl font-bold mb-10'>
+        Vous connaissez-peut être ? ({friendsSuggestions.length}){" "}
+      </h1>
       <ContactListWrapper
         listLength={friendsSuggestions.length}
         setLimit={setLimit}
@@ -62,7 +65,7 @@ const FriendSuggestions = () => {
           />
         ))}
       </ContactListWrapper>
-    </>
+    </section>
   );
 };
 

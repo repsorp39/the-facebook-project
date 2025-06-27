@@ -30,7 +30,7 @@ const ContactSideBar = () => {
     <Link
       key={item.path}
       to={`/contacts/${item.path}`}
-      className={`self-start group block rounded-xl  hover:bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 ${location.endsWith(item.path) ? 'bg-blue-50  border-blue-200':'bg-slate-50'}`}
+      className={`self-start group block rounded-xl  hover:bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 ${location.endsWith(item.path) ? 'bg-blue-200  border-blue-200 hover:bg-blue-200':'bg-slate-50'}`}
     >
       <div className="flex items-center gap-4">
         <div className="p-2 bg-blue-100 text-blue-600 rounded-full">

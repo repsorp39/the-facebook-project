@@ -4,7 +4,6 @@ import {
   confirmFriend,
   fetchFriendsRequest,
   friendsReqSelector,
-  removeFriend,
   removeRequest,
 } from "../../../store/features/friends-slice";
 import EmptyComponent from "../../../components/EmptyComponent";
@@ -107,9 +106,10 @@ const FriendRequest = () => {
             </div>
             <span
               onClick={() => handleRejection(friend.id)}
+              title="Retirer"
               className='absolute top-0 left-0 m-3 group-hover:text-red-600 cursor-pointer'
             >
-              <Trash2Icon className='w-6 h-5 ' />
+              <Trash2Icon className='w-6 h-5' />
             </span>
           </div>
         ))}

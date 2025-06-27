@@ -1,9 +1,9 @@
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Trash2Icon,
   MessageSquareText,
 } from "lucide-react";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 
 const ContactCardFriend = ({ friend, handleRejection }) => {
 

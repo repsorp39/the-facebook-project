@@ -79,7 +79,16 @@ const friendReducer = createSlice({
 export const friendsSelector = (state) => state.friends.friends;
 export const friendsReqSelector = (state) => state.friends.friendsRequest;
 export const friendsSuggestionsSelector = (state) => state.friends.friendsSuggestions;
-export const { removeSuggestions,removeFriend,removeRequest ,confirmFriend} = friendReducer.actions;
-export { fetchFriendsSuggestions,fetchFriends,fetchFriendsRequest };
+export const { 
+  removeSuggestions,
+  removeFriend,
+  removeRequest,
+  confirmFriend
+} = friendReducer.actions;
+export { 
+  fetchFriendsSuggestions,
+  fetchFriends,
+  fetchFriendsRequest 
+};
 export default friendReducer.reducer;
 

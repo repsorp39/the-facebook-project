@@ -26,7 +26,6 @@ function App() {
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route path='/' Component={Home}>
-              {" "}
             </Route>
             <Route path='/discussions' Component={Discussions}></Route>
             <Route path='/notifications' Component={Notifications}></Route>
@@ -38,13 +37,10 @@ function App() {
             <Route path='/profile/:userid' Component={Profil}></Route>
           </Route>
           <Route path='/login' Component={Login}>
-            {" "}
           </Route>
           <Route path='/confirm-email' Component={ConfirmEmail}>
-            {" "}
           </Route>
           <Route path='/register' Component={Register}>
-            {" "}
           </Route>
         </Routes>
       </Router>
