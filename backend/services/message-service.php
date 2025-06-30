@@ -15,7 +15,7 @@ class Message{
 
     public function create(array $message):bool{
         try {
-            $query = "INSERT INTO messages (user_id1,user_id2,content,type) VALUES  (:userid1, :userid2, :content,:type)";
+            $query = "INSERT INTO messages (user_id1,user_id2,content,type,description) VALUES  (:userid1, :userid2, :content,:type,:description)";
             $stmt = $this->bdd->prepare($query);
             $state = $stmt->execute(
             [
@@ -23,6 +23,7 @@ class Message{
                 "userid2" => $message["id"],
                 "content" => $message["content"],
                 "type" => $message["type"],
+                "description" => $message["description"],
             ]);
             return $state;
         } catch (Exception $e) {
@@ -94,7 +95,7 @@ class Message{
         try {
             $sql = "SELECT * FROM messages WHERE
             (user_id1 = :user_id1 AND user_id2 = :user_id2) 
-            OR (user_id1 = :user_id2 AND user_id2 = :user_id1)";
+            OR (user_id1 = :user_id2 AND user_id2 = :user_id1) ";
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute([
                 "user_id1"=>$this->userid,
