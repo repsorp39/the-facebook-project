@@ -4,6 +4,7 @@ import {
   Trash2Icon,
   MessageSquareText,
 } from "lucide-react";
+import { PiMessengerLogo } from "react-icons/pi";
 
 const ContactCardFriend = ({ friend, handleRejection }) => {
 
@@ -26,7 +27,7 @@ const ContactCardFriend = ({ friend, handleRejection }) => {
       {/* Nom */}
       <Link
         to={`/profile/${friend.id}`}
-        className='text-lg font-semibold text-gray-800 mb-2'
+        className='text-sm mt-2 font-semibold text-gray-800 mb-2'
       >
         {(friend.firstname + " " + friend.lastname).length > 10
           ? (friend.firstname + " " + friend.lastname).slice(0, 10) + "..."
@@ -37,7 +38,7 @@ const ContactCardFriend = ({ friend, handleRejection }) => {
       <div className='flex gap-2 mt-2 w-full'>
         <button onClick={()=>navigate(`/discussions/${friend.id}`)} className='mx-2 w-full flex flex-col items-center content-center px-4 py-1 ring-1 ring-white bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 group-hover:ring-blue-400 transition' title="Écrire un mot" >
           <span className='block' >
-            <MessageSquareText className='text-blue-600  w-5 h-5' />
+            <PiMessengerLogo className='text-blue-600  w-5 h-5' />
           </span>
         </button>
       </div>

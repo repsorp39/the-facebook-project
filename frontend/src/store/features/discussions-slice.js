@@ -6,7 +6,7 @@ const initialState = {
   chatPreview:[],
 }
 
-const fetchChat= createAsyncThunk("fetch/discussions",async (friendid = "")=>{
+const fetchChat = createAsyncThunk("fetch/discussions",async (friendid = "")=>{
   try {
     const http = getAxiosInstance();
     const res = await http.get(`/messages/message.get.php?friend_id=${friendid}`);
@@ -50,6 +50,9 @@ const discussionsReducer = createSlice({
   name:"discussions",
   initialState,
   extraReducers:(builder)=>{
+    builder.addCase(fetchChat.pending,(state,action) =>{
+      state.isLoading = true;
+    })
     builder.addCase(fetchChat.fulfilled,(state,action) =>{
       state.isLoading = false;
       state.chatPreview = action.payload;

@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Wrapper from '../../components/Wrapper';
 import ChatBar from './components/ChatBar';
-import DicussionBox from './components/DicussionBox';
+import { Outlet } from 'react-router-dom';
 
 const Discussions = () => {
-  const [currentDiscussionId,setCurrentDiscussionId] = useState(null);
   return (
     <Wrapper>
-        <ChatBar setCurrentDiscussionId={setCurrentDiscussionId} />
-        <DicussionBox currentDiscussionId={currentDiscussionId} />
+      <section className='flex h-[520px] mx-auto max-w-[950px]  border-blue-100'>
+        <ChatBar />
+        <Outlet />
+      </section>
     </Wrapper>
   );
 };

@@ -1,73 +1,96 @@
 import { Search } from "lucide-react";
 import React, { useEffect } from "react";
-import { Dot } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFriends } from "../../../store/features/friends-slice";
 import { fetchChat } from "../../../store/features/discussions-slice";
+import PreviewMessage from "./PreviewMessage";
+import { useNavigate } from "react-router-dom";
 
 const ChatBar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const friendsList = useSelector((state) => state.friends.friends);
-  const previewMessages = useSelector(state => state.chat.chatPreview);
+  const previewMessages = useSelector((state) => state.chat.chatPreview);
+
+  const userid = (state) => state.auth.userinfo.userid;
+
 
   useEffect(() => {
     dispatch(fetchFriends());
     dispatch(fetchChat());
   }, []);
 
+  function handleConversationStart(id) {
+    navigate(`/discussions/${id}`);
+  }
+
   return (
-    <section className='w-[400px] h-[500px] bg-blue-50 shadow-sm fixed left-0 ms-10 pt-2 pb-1 px-2 rounded-lg flex flex-col content-center'>
+    <section className='w-[400px] shrink-0 min-w-[350px] bg-slate-100 p-4 flex flex-col gap-4 border-r-2 border-blue-100'>
+      {/* Barre de recherche */}
+      <div className='relative'>
+        <Search className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+        <input
+          type='search'
+          placeholder='Rechercher un ami ...'
+          className='pl-10 pr-4 py-2 w-full rounded-lg text-sm text-gray-700 bg-white border border-gray-200 focus:ring-2 focus:ring-blue-400 focus:outline-none transition'
+        />
+      </div>
+
       <div>
-        {/* Search Bar */}
-        <div className='flex items-center'>
-          <span className='translate-x-9 group-focus:text-blue-500'>
-            <Search />
-          </span>
-          <input
-            type='search'
-            className='ring-1 outline-none hover:outline-none hover:ring-blue-400 text-[14px] py-2 ps-10 text-gray-500 rounded-xl w-full'
-            placeholder='Rechercher un ami ...'
-          />
-        </div>
-        {/* Sections for chat with friends */}
-        <h1 className='text-gray-500 font-bold my-3 text-xl'>
-          Discutez-avec vos amis
-        </h1>
-        <div className='flex items-center content-center gap-2 w-full overflow-x-auto'>
-          {/* Sort friends to show the online friends first */}
-          
+        <h2 className='text-gray-600 font-semibold text-lg mb-2'>
+          Discutez avec vos amis
+        </h2>
+        <div className='flex items-center gap-3 overflow-x-auto pb-1'>
           {Array.from(friendsList)
             .sort((a, b) => +b.is_online - +a.is_online)
-            .map((friend) => {
-              return (
-                <div className='relative' key={friend.id}>
-                  <img
-                    src={friend.picture}
-                    alt={friend.firstname}
-                    className='w-14 h-14 rounded-full object-cover'
-                  />
-                  <span className='absolute top-[28px] left-5'>
-                    <Dot
-                      className={`w-12 h-12 ${
-                        Boolean(+friend.is_online)
-                          ? "text-green-500"
-                          : "text-gray-500"
-                      }`}
-                    />
-                  </span>
-                  <p>
-                    {" "}
-                    {friend.lastname.length > 10
-                      ? friend.lastname.slice(0, 5) + "..."
-                      : friend.lastname}{" "}
-                  </p>
-                </div>
-              );
-            })}
+            .map((friend) => (
+              <div
+                className='text-center relative cursor-pointer'
+                key={friend.id}
+                onClick={() => handleConversationStart(friend.id)}
+              >
+                <img
+                  src={friend.picture}
+                  alt={friend.firstname}
+                  className='w-14 h-14 rounded-full object-cover border-2 border-white shadow'
+                />
+                <span
+                  className={`absolute bottom-1 right-1 w-3 h-3 rounded-full border-2 border-white bg-gray-400 
+                ${Boolean(+friend.is_online) ? "bg-green-500" : "bg-gray-400"}`}
+                ></span>
+                <p className='text-xs mt-1 text-gray-700 font-medium w-14'>
+                  {friend.lastname.length > 10
+                    ? friend.lastname.slice(0, 5) + "..."
+                    : friend.lastname}
+                </p>
+              </div>
+            ))}
         </div>
-        <h2 className="text-gray-500 font-bold my-3 text-xl mt-5">Vos disussions</h2>
-        <div className='bg-blue-100 w-full h-full p-2 mt-2'>
-            
+      </div>
+
+      <div className='flex flex-col flex-grow'>
+        <h2 className='text-gray-600 font-semibold text-lg mb-2 mt-1'>
+          Vos discussions
+        </h2>
+        <div className='bg-white max-h-[260px] flex-1 rounded-md shadow-inner overflow-y-auto p-2 space-y-2'>
+          {previewMessages.length > 0 ? (
+            previewMessages.map((message) => (
+              <PreviewMessage
+                key={message.id}
+                message={message}
+                action={() =>
+                  handleConversationStart(
+                    +message.user_id1 === userid ? message.user_id1 : message.user_id2
+                  )
+                }
+              />
+            ))
+          ) : (
+            <div className='flex items-center justify-center text-sm text-gray-400 h-full'>
+              Aucune discussion pour le moment
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@plugin "daisyui";
+/* styles.css */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Edge */
+  scrollbar-width: none;  /* Firefox */
+}

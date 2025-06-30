@@ -14,6 +14,8 @@ import Profil from "./pages/Profil";
 import FriendRequest from "./pages/Contacts/components/FriendRequest";
 import FriendList from "./pages/Contacts/components/FriendList";
 import FriendSuggestions from "./pages/Contacts/components/FriendSuggestions";
+import DicussionBox from "./pages/Discussions/components/DicussionBox";
+
 
 function App() {
   const isLoading = useSelector((state) => state.auth.isLoading);
@@ -27,7 +29,9 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path='/' Component={Home}>
             </Route>
-            <Route path='/discussions' Component={Discussions}></Route>
+            <Route path='/discussions' Component={Discussions}>
+              <Route path=":discussionid" index Component={DicussionBox}></Route>
+            </Route>
             <Route path='/notifications' Component={Notifications}></Route>
             <Route path='/contacts' Component={Contacts}>
               <Route path='' Component={FriendRequest } index />

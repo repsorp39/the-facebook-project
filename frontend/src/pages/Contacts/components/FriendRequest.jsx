@@ -85,7 +85,7 @@ const FriendRequest = () => {
             {/* Nom */}
             <Link
               to={`/profile/${friend.id}`}
-              className='text-lg font-semibold text-gray-800 mb-2'
+              className='text-sm mt-2 font-semibold text-gray-800 mb-2'
             >
               {(friend.firstname + " " + friend.lastname).length > 10
                 ? (friend.firstname + " " + friend.lastname).slice(0, 10) +

@@ -6,8 +6,10 @@ import { Outlet } from 'react-router-dom';
 const Contact = () => {
   return (
     <Wrapper>
-      <ContactSideBar />
-      <Outlet />
+      <div className='w-[90%] md:w-[70%] lg:w-[50%] mx-auto'>
+        <ContactSideBar />
+        <Outlet />
+      </div>
     </Wrapper>
   );
 };
