@@ -1,14 +1,18 @@
-import { Dot, MoveLeft } from "lucide-react";
 import React from "react";
+import { Dot, MoveLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SendBar from "./SendBar";
 import SingleMessage from "./SingleMessage";
+import { useSelector } from "react-redux";
 
-const Messages = ({ messages, friendinfo }) => {
+const Messages = ({ messages, friendinfo, messageBoxRef }) => {
   const navigate = useNavigate();
+  const userid = useSelector((state) => state.auth.userinfo.userid);
+
+  
   return (
-    <section className='flex flex-col relative'>
-      <section className='flex  items-center gap-3 px-3 py-2 border-b-2 border-dotted border-gray-300'>
+    <section className='flex flex-col relative overflow-auto'>
+      <section className='flex items-center gap-3 px-3 py-2 border-b-2 border-dotted border-gray-300'>
         {/* Message Header */}
         <div>
           <div>
@@ -38,13 +42,16 @@ const Messages = ({ messages, friendinfo }) => {
             <Dot className='w-10 h-12' />{" "}
           </span>
         </div>
-        <div className='truncate text-sm font-semibold text-gray-600'>
+        <div className='truncate text-md font-semibold text-gray-600'>
           {friendinfo.firstname + " " + friendinfo.lastname}
         </div>
       </section>
-      <section className='flex flex-col h-[400px] bg-blue-50'>
+      <section
+        ref={messageBoxRef}
+        className='flex flex-col h-[400px] overflow-y-auto bg-blue-50 px-3'
+      >
         {messages.map((message) => (
-          <SingleMessage message={message} key={message.id} />
+          <SingleMessage message={message} key={message.id} userid={userid} />
         ))}
       </section>
       <SendBar friendid={friendinfo.id} />

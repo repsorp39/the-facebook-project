@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 const Discussions = () => {
   return (
     <Wrapper>
-      <section className='flex h-[520px] mx-auto max-w-[950px]  border-blue-100'>
+      <section className='flex h-[570px] mx-auto max-w-[1100px] w-[90%] border-blue-100 overflow-x-auto shadow-md'>
         <ChatBar />
         <Outlet />
       </section>

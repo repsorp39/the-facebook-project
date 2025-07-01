@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { RiSendPlaneLine } from "react-icons/ri";
 import toast from "react-hot-toast";
@@ -62,6 +62,12 @@ const SendBar = ({ friendid }) => {
     setInputContent("");
     setMedia({});
   }
+
+  //send the audio note as soon as the audio is stopped
+  useEffect(()=>{
+    if(media.file && media.type === "audio") sendMessage();
+  },[media.file]);
+
   return (
     <>
       <div className='flex items-center my-2 shrink-0 relative'>

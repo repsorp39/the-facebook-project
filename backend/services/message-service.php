@@ -34,7 +34,7 @@ class Message{
 
     public function delete(string $messageid):bool{
         try {
-            $query = "UPDATE messages SET deleted = 1 WHERE id = ?";
+            $query = "UPDATE messages SET description = NULL, content = NULL, deleted = 1 WHERE id = ?";
             $stmt = $this->bdd->prepare($query);
             $state = $stmt->execute([$messageid]);
             return $state;
@@ -48,7 +48,7 @@ class Message{
         try {
             $sql = "UPDATE messages SET content = :content,edited=1 WHERE id = :id";
             $stmt = $this->bdd->prepare($sql);
-            $state = $stmt->execute([
+            $state = $stmt->execute([   
                 ':content' => $content,
                 ':id' => $messageid
             ]);

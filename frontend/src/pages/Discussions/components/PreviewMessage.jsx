@@ -1,5 +1,5 @@
-import { AudioLines, Image, Play } from "lucide-react";
 import React from "react";
+import { AudioLines, Image, Play } from "lucide-react";
 
 const PreviewMessage = ({ message, action }) => {
   return (
@@ -55,4 +55,4 @@ const PreviewMessage = ({ message, action }) => {
   );
 };
 
-export default PreviewMessage;
+export default React.memo(PreviewMessage);
