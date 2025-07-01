@@ -2,42 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.activeLink {
-  position: relative;
-  padding-bottom: 6px;
-  font-weight: bold;
-} 
-
-.activeLink::after {
-    content: "";
-    height: 2px;
-    width: 0;
-    background: rgb(109, 172, 223);
-    position: absolute;
-    border-radius: 10px;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    -webkit-animation: anim 0.3s ease forwards;
-    animation: anim 0.6s ease forwards;
+@plugin "daisyui";
+/* styles.css */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
-
-@keyframes anim {
-  to {
-      width: 100%;
-  }
-}
-
-.user-info-section table{
-  border: 2px solid;
-  tr:nth-child(odd){
-    padding: 15px;
-    background-color: rgb(48, 182, 206);
-  }
-
-  td,th{
-    padding: 15px;
-  }
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Edge */
+  scrollbar-width: none;  /* Firefox */
 }

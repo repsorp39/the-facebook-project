@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import axios from "../../config/axios-config";
+import getAxiosInstance from "../../config/axios-config";
 import Wrapper from "../../components/Wrapper";
 
 const Profil = () => {
@@ -18,7 +18,8 @@ const Profil = () => {
         setUserInfo(loginUser);
         return;
       }
-      const res = await axios.get(`/users/user.get.php/?id=${paramsUserId}`);
+      const http = getAxiosInstance();
+      const res = await http.get(`/users/user.get.php/?id=${paramsUserId}`);
       setUserInfo(res.data);
     } catch (err) {
       console.log(err);

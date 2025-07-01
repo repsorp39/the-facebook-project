@@ -4,11 +4,11 @@ import React, { useState } from "react";
 const PostDescription = ({ description }) => {
   const [seeMore, setSeeMore] = useState(false);
   return (
-    <p className='px-4 pb-2 text-gray-700 text-sm leading-relaxed'>
+    <div className='px-4 pb-2 text-gray-700 text-sm leading-relaxed'>
       {description.length < 300 ? (
         description
       ) : (
-        <p>
+        <div>
           {seeMore ? description : description.substr(0, 300)}
           <span
             onClick={() => setSeeMore(!seeMore)}
@@ -16,9 +16,9 @@ const PostDescription = ({ description }) => {
           >
             {!seeMore ? " ... voir plus" : " ... voir moins"}
           </span>
-        </p>
+        </div>
       )}
-    </p>
+    </div>
   );
 };
 

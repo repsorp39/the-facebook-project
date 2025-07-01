@@ -1,6 +1,8 @@
 <?php
 namespace App\MessageService;
-require_once(__DIR__ . '/../database/db.php');
+require_once("../../database/db.php");
+
+use Exception;
 
 class Message{
     private $bdd;
@@ -12,27 +14,97 @@ class Message{
     }
 
     public function create(array $message):bool{
-        
-        return true;
+        try {
+            $query = "INSERT INTO messages (user_id1,user_id2,content,type,description) VALUES  (:userid1, :userid2, :content,:type,:description)";
+            $stmt = $this->bdd->prepare($query);
+            $state = $stmt->execute(
+            [
+                "userid1" => $this->userid,
+                "userid2" => $message["id"],
+                "content" => $message["content"],
+                "type" => $message["type"],
+                "description" => $message["description"],
+            ]);
+            return $state;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
     public function delete(string $messageid):bool{
-
-        return true;
+        try {
+            $query = "UPDATE messages SET deleted = 1 WHERE id = ?";
+            $stmt = $this->bdd->prepare($query);
+            $state = $stmt->execute([$messageid]);
+            return $state;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
-    public function update(array $message):bool{
-        return true;
+    public function update(string $messageid,string $content):bool{
+        try {
+            $sql = "UPDATE messages SET content = :content,edited=1 WHERE id = :id";
+            $stmt = $this->bdd->prepare($sql);
+            $state = $stmt->execute([
+                ':content' => $content,
+                ':id' => $messageid
+            ]);
+            return $state;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
-    //return all last message send to each contact of the actual user
+    //return all last message sent to each contact of the actual user
     //it is the same than the homepage of messenger before clicking on the contact to see all previous message
-    public function getPreview():array{
-        return [];
+    public function getPreview(){
+        try {
+            //on récupère tous les utilisateurs avec lesquels il a déjà échangé
+            $sql = "SELECT id,picture,firstname,lastname FROM users WHERE id != :userid AND id IN (SELECT user_id1 FROM messages WHERE user_id2 = :userid UNION SELECT user_id2 FROM messages WHERE user_id1 = :userid)";
+            $query = $this->bdd->prepare($sql);
+            $query->execute(["userid"=>$this->userid]);
+            $friends = $query->fetchAll();
+            $messages = [];
+            //on récupère le dernier message avec chaque ami
+            foreach($friends as $friend){
+                $sql = "SELECT * FROM messages WHERE (user_id1 = :user1 AND user_id2 = :user2) OR (user_id1 = :user2 AND user_id2 = :user1) ORDER BY id  DESC LIMIT 1";
+                $query = $this->bdd->prepare($sql);
+                $params =  [
+                    "user1" => $this->userid,
+                    "user2" =>$friend[0]
+                ];
+                $query->execute($params);
+                $res = $query->fetch();
+                $res["picture"] = $friend["picture"];
+                $res["firstname"] = $friend["firstname"];
+                $res["lastname"] = $friend["lastname"];
+                $messages[] = $res;
+            }
+
+            return $messages;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
-    public function getAllWithOneContact($contactid):array{
-        return [];
+    public function getAllWithOneContact($contactid){
+        try {
+            $sql = "SELECT * FROM messages WHERE
+            (user_id1 = :user_id1 AND user_id2 = :user_id2) 
+            OR (user_id1 = :user_id2 AND user_id2 = :user_id1) ";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([
+                "user_id1"=>$this->userid,
+                "user_id2"=>$contactid
+            ]);
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 }
