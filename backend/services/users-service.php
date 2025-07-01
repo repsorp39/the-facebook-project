@@ -92,4 +92,22 @@ class User {
             "users" => $users
         ];
     }
+    public function createmoderator(string $id){
+        $query= $this->bdd->prepare("UPDATE users SET role = 1 WHERE id = ?");
+        $statement = $query->execute([$id]);
+        return $statement;
+    }
+    public function createadmin(string $id){
+        $query= $this->bdd->prepare("UPDATE users SET role = 2 WHERE id = ?");
+        $statement = $query->execute([$id]);
+        return $statement;
+    }
+    public function getAllModerators():array{
+        $query = $this->bdd->query("SELECT * FROM users WHERE role = 1");
+        return $query->fetchAll();
+    }
+    public function getAllAdmins():array{
+        $query = $this->bdd->query("SELECT * FROM users WHERE role = 2");
+        return $query->fetchAll();
+    }
 }

@@ -14,7 +14,8 @@ import Profil from "./pages/Profil";
 import FriendRequest from "./pages/Contacts/components/FriendRequest";
 import FriendList from "./pages/Contacts/components/FriendList";
 import FriendSuggestions from "./pages/Contacts/components/FriendSuggestions";
-import DicussionBox from "./pages/Discussions/components/DicussionBox";
+import DicussionBox from
+ "./pages/Discussions/components/DicussionBox";
 
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-      <Toaster position='top-right' />
+      <Toaster position="top-right" />
     </>
   );
 }
