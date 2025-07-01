@@ -11,6 +11,7 @@ import Discussions from "./pages/Discussions";
 import Notifications from "./pages/Notifications";
 import Contacts from "./pages/Contacts";
 import Profil from './pages/Profil';
+import Settings from './pages/settings';
 
 
 function App() {
@@ -27,10 +28,12 @@ function App() {
                 <Route path='/notifications' Component={Notifications}></Route>
                 <Route path='/contacts' Component={Contacts}></Route>
                 <Route path='/profile/:userid' Component={Profil}></Route>
+                <Route path='/Settings' Component={Settings}></Route>
               </Route>
               <Route path='/login' Component={Login}> </Route>
               <Route path='/confirm-email' Component={ConfirmEmail}> </Route>
               <Route path='/register' Component={Register}> </Route>
+              
           </Routes>
       </Router>
       <Toaster position='top-right' />
@@ -39,3 +42,4 @@ function App() {
 }
 
 export default App;
+

@@ -7,7 +7,7 @@ import { Inbox } from "lucide-react";
 const Article = () => {
   const dispatch = useDispatch();
 
-  const posts = useSelector((state => state.posts.posts));
+  const posts = useSelector((state) => state.posts.posts);
   const loading = useSelector((state) => state.posts.loading);
 
   useEffect(() => {

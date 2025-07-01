@@ -16,3 +16,4 @@ function decodeTokenFromHeader(){
     $userid = jwtDecode($token,"user_id");
     return $userid;
 }
+
