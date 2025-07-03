@@ -97,6 +97,40 @@ class Post
             return [];
         }
     }
+    //do not forget to send with comments if it available
+    public function getLastUserPosts(string $userid): array
+    {
+        try {
+            $sql = "SELECT p.*, u.firstname, u.lastname, u.picture as user_picture 
+                    FROM posts p 
+                    JOIN users u ON p.user_id = u.id 
+                    WHERE p.user_id = ?
+                    ORDER BY p.post_id DESC LIMIT 3";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([$userid]);
+            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            require_once __DIR__ . '/comments-service.php';
+            $commentService = new \App\CommentService\Comment();
+            foreach ($posts as &$post) {
+                // Récupérer les likes
+                $likeStmt = $this->bdd->prepare("SELECT user_id FROM `like` WHERE post_id = ?");
+                $likeStmt->execute([$post['post_id']]);
+                $post['likes'] = $likeStmt->fetchAll(PDO::FETCH_COLUMN);
+                // Récupérer les commentaires enrichis
+                $comments = $commentService->getAll($post['post_id']);
+                foreach ($comments as &$comment) {
+                    $userStmt = $this->bdd->prepare("SELECT id, firstname, lastname, picture FROM users WHERE id = ?");
+                    $userStmt->execute([$comment['user_id']]);
+                    $comment['user'] = $userStmt->fetch(PDO::FETCH_ASSOC);
+                }
+                $post['comments'] = $comments;
+            }
+            return $posts;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
 
     public function getById(string $postid): array
     {

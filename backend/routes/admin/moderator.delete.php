@@ -1,15 +1,13 @@
 <?php
 require_once("../../config/cors.php");
 require_once("../../utils/serve-json.php");
-require("../../utils/chech-token.php");
-require("../../services/auth-service.php");
-require("../../services/users-service.php");
-
+require_once("../../utils/chech-token.php");
+require_once("../../services/auth-service.php");
+require_once("../../services/users-service.php");
 
 
 use App\JSON\JSON;
 use App\AuthService\Auth;
-use App\PostService\Post;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
@@ -20,20 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
     if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
     $User = new User();
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    if (isset($data["ids"]) && is_array($data["ids"])) {
-        foreach ($data["ids"] as $id) {
-            $checkadmin = new Auth($id);
-            if($checkadmin->isModerator($id)) {
-                $User->delete($id);
-                return JSON::serve(200, ["message" => "Moderateur supprimé avec succès"]);
-            } else {
-                return JSON::serve(403, ["message" => "Accès interdit : l'utilisateur n'est pas un modérateur"]);
-            }
-            
-        }
-        
-    
-    }
+    $id = $_GET["id"] ?? "";
+    if(!$id) return JSON::serve(400, ["message" => "id requis"]);   
+    $User->removeModerator($id);
+    JSON::serve(200,["message" => "Utilisateur retiré"]);
 }

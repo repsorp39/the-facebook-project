@@ -1,9 +1,6 @@
 <?php
 namespace App\AuthService;
-require_once(__DIR__."./users-service.php");
-
-
-
+require_once(__DIR__."/users-service.php");
 require_once(__DIR__ . '/../database/db.php');
 
 use Exception;
@@ -20,27 +17,27 @@ class Auth
         $this->bdd = database();
          $this->id = $id;
     }
-public function isAdmin(){
-$User=new User();
 
-$foundUser=$User->getById($this->id);
+    public function isAdmin(){
+        $User=new User();
 
-if(!$foundUser)return false;
+        $foundUser=$User->getById($this->id);
 
-if($foundUser["role"]==2) return true;
-else return false;
+        if(!$foundUser)return false;
 
-}
-public function isModerator(){
-    $User=new User();
-    
-    $foundUser=$User->getById($this->id);
-    
-    if(!$foundUser)return false;
-    
-    if($foundUser["role"]==1 || $foundUser["role"]=2) return true;
-    else return false;
-    
+        if($foundUser["role"]==2) return true;
+        else return false;
+    }
+
+    public function isModerator(){
+        $User=new User();
+        
+        $foundUser=$User->getById($this->id);
+        
+        if(!$foundUser)return false;
+        
+        if($foundUser["role"]==1 || $foundUser["role"]=2) return true;
+        else return false;
     }
     
 }
