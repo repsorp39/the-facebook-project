@@ -52,7 +52,7 @@ function SignIn() {
     <>
       <section className={`flex flex-col items-center content-center ${openForgotPasswordModal ? "blur-sm":""}`}>
         <form
-          className='mx-auto bg-slate-100 p-5 shadow-lg mt-10 w-[330px] md:w-[400px]'
+          className='mx-auto bg-white p-5 shadow-lg mt-10 w-[330px] md:w-[400px]'
           onSubmit={handleSubmit}
         >
           <SiteMark />

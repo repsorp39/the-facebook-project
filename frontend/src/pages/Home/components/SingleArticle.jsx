@@ -10,23 +10,20 @@ import Comments from "./Comments";
 import ImageRounded from "../../../components/ImageRounded";
 
 import {
-   deletePost, 
-   dislikePost, 
-   likePost, 
-   updatePost
+  deletePost,
+  dislikePost,
+  likePost,
+  updatePost,
 } from "../../../store/features/posts-slice";
 
-import {
-  ChevronsDownUp,
-  Forward,
-  Heart,
-  MessageCircle,
-  ThumbsUp,
-  X,
-} from "lucide-react";
+import { ChevronsDownUp, Forward, Heart, MessageCircle, X } from "lucide-react";
 import PostDescription from "./PostDescription";
+import { FaHeart, FaThumbsUp } from "react-icons/fa";
+import { GoTrash } from "react-icons/go";
 
-const SingleArticle = ({ post }) => {
+const SingleArticle = ({ post,moderatorAction }) => {
+  const isModerator = useSelector((state) => state.auth.isModerator);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const http = getAxiosInstance();
@@ -45,18 +42,21 @@ const SingleArticle = ({ post }) => {
   function handleClose(id) {
     dispatch(deletePost(id));
     toast.success(
-      "Vous avez retiré ce post de votre fil. Mais vous pourriez le voir ailleurs.",{duration:3000}
+      "Vous avez retiré ce post de votre fil. Mais vous pourriez le voir ailleurs.",
+      { duration: 3000 }
     );
   }
 
   async function handleDelete(id) {
     try {
-      await http.delete(
-        `/articles/article.delete.php?post_id=${id}`
-      );
+      await http.delete(`/articles/article.delete.php?post_id=${id}`);
       //lui il retire seulement du fil actuellement pour éviter des requetes pour recuperer
       //tous les postes à nouveau
       dispatch(deletePost(id));
+
+      //dans le cas ou cette fonction est exécuté en tant que admin
+      if(isModerator) moderatorAction();
+      
       toast.success("Post supprimé!");
     } catch (error) {
       toast.error("Une erreur est survenue lors de la suppression!");
@@ -90,19 +90,18 @@ const SingleArticle = ({ post }) => {
       if (type === "like") {
         setHasLikedPost(true);
         const formData = new FormData();
-        formData.append("post_id",post.post_id);
-        await http.post(`/articles/article.like.php/`,formData);
-        toast.success("Super",{
-         icon:'🎉',
-         duration:3000
+        formData.append("post_id", post.post_id);
+        await http.post(`/articles/article.like.php/`, formData);
+        toast.success("Super", {
+          icon: "🎉",
+          duration: 3000,
         });
-        dispatch(likePost({userid:user.userid,post_id:post.post_id}));
-     }
-     else {
-      setHasLikedPost(false);
-      await http.delete(`/articles/article.like.php?post_id=${post.post_id}`);
-      dispatch(dislikePost({userid:user.userid,post_id:post.post_id})); 
-     }
+        dispatch(likePost({ userid: user.userid, post_id: post.post_id }));
+      } else {
+        setHasLikedPost(false);
+        await http.delete(`/articles/article.like.php?post_id=${post.post_id}`);
+        dispatch(dislikePost({ userid: user.userid, post_id: post.post_id }));
+      }
     } catch (error) {
       console.log(error);
       toast.error("Une erreur est survenue!");
@@ -132,27 +131,34 @@ const SingleArticle = ({ post }) => {
         </div>
 
         {/* Menu actions */}
-        <div className='flex gap-3 items-center text-gray-500'>
-          {user.userid === post.user_id && (
-            <ContextMenu
-              editable={Boolean(post.description)}
-              onEdit={() => setEditing(true)}
-              onDelete={() => handleDelete(post.post_id)}
-            />
-          )}
+        {!isModerator ? (
+          <div className='flex gap-3 items-center text-gray-500'>
+            {user.userid === post.user_id && (
+              <ContextMenu
+                editable={Boolean(post.description)}
+                onEdit={() => setEditing(true)}
+                onDelete={() => handleDelete(post.post_id)}
+              />
+            )}
 
-          <X
-            onClick={() => handleClose(post.post_id)}
-            className='hover:text-red-500 cursor-pointer transition'
-          />
-        </div>
+            <X
+              onClick={() => handleClose(post.post_id)}
+              className='hover:text-red-500 cursor-pointer transition'
+            />
+          </div>
+        ) : (
+          <div className='flex gap-3 items-center text-gray-500'>
+            <GoTrash
+              onClick={() => handleDelete(post.post_id)}
+              className='hover:text-red-500 cursor-pointer transition p-2 rounded-full hover:bg-gray-100'
+            />
+          </div>
+        )}
       </section>
 
       {/* Description */}
       {!isEditing ? (
-        post.description && (
-          <PostDescription description={post.description} />
-        )
+        post.description && <PostDescription description={post.description} />
       ) : (
         <div className='flex items-end content-center'>
           <textarea
@@ -194,8 +200,8 @@ const SingleArticle = ({ post }) => {
       <section className='px-4 pt-2 flex items-center justify-between text-sm text-gray-600'>
         <div className='flex items-center gap-1'>
           <div className='relative'>
-            <Heart className='text-pink-600 w-5 h-5' />
-            <ThumbsUp className='text-blue-600 w-5 h-5 absolute left-3 top-0' />
+            <FaHeart className='text-pink-600 w-5 h-5' />
+            <FaThumbsUp className='text-blue-600 w-5 h-5 absolute left-4 me-2 top-0' />
           </div>
           <span className='ml-4'> {post.likes.length} </span>
         </div>
@@ -242,7 +248,10 @@ const SingleArticle = ({ post }) => {
           } `}
           onClick={() => handleReaction(hasLikedPost ? "dislike" : "like")}
         >
-          <Heart className='w-4 h-4 ${hasLikedPost ? "text-pink-600":""}' fill="currentColor" />
+          <Heart
+            className='w-4 h-4 ${hasLikedPost ? "text-pink-600":""}'
+            fill='currentColor'
+          />
           <span>J'aime</span>
         </button>
         <button

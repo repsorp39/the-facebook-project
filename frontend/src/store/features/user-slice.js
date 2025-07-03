@@ -9,7 +9,9 @@ const initialState = {
   isRegistering:false,
   registerErrorMessage:'',
   isLoggingState:false,
-  loginErrorMessage:''
+  loginErrorMessage:'',
+  isModerator:false,
+  isAdmin:false
 }
 
 const fetchUser =  createAsyncThunk("/user/info",async ()=>{
@@ -25,8 +27,8 @@ const fetchUser =  createAsyncThunk("/user/info",async ()=>{
       birthday:user.birthday,
       picture:user.picture,
       role:user.role
-
     };
+
   } catch (error) {
     throw new Error (error.response.data.message);
   }
@@ -80,6 +82,8 @@ const userReducer= createSlice({
       state.isLoggedIn = true;
       state.isLoading = false;
       state.userinfo = action.payload;
+      state.isAdmin = +action.payload.role === 2;
+      state.isModerator = +action.payload.role === 1 || state.isAdmin;
     })
 
     builder.addCase(fetchUser.rejected,(state,action)=>{

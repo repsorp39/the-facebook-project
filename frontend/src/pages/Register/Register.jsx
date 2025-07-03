@@ -82,7 +82,7 @@ function Register() {
   return (
       <section className='flex flex-col justify-center content-center'>
         <form
-          className=' bg-slate-100 p-5 shadow-lg mt-10 w-[330px] sm:w-[400px] md:w-[600px] mx-auto' 
+          className=' bg-white p-5 shadow-lg mt-10 w-[330px] sm:w-[400px] md:w-[600px] mx-auto' 
           onSubmit={handleSubmit}
         >
           <SiteMark />
