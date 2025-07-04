@@ -11,9 +11,11 @@ const Article = () => {
   const posts = useSelector((state) => state.posts.posts);
   const loading = useSelector((state) => state.posts.loading);
 
+
   useEffect(() => {
     dispatch(fetchPosts());
   }, []);
+
 
   if (posts.length === 0)
     return <EmptyComponent Icon={Inbox} message='Aucun post disponible' />;

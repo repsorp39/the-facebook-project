@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Trash2Icon,
-  MessageSquareText,
 } from "lucide-react";
 import { PiMessengerLogo } from "react-icons/pi";
 
@@ -44,7 +43,8 @@ const ContactCardFriend = ({ friend, handleRejection }) => {
       </div>
       <span
         onClick={() => handleRejection(friend.id)}
-        className='absolute top-0 left-0 m-3 group-hover:text-red-600 cursor-pointer'
+        title="Retirer de vos amis"
+        className='absolute top-0 left-0 m-3 group-hover:bg-white p-2 rounded-full transition hover:text-red-600 cursor-pointer'
       >
         <Trash2Icon className='w-6 h-5 ' />
       </span>

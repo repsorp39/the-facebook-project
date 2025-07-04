@@ -5,6 +5,8 @@ import { fetchFriends } from "../../../store/features/friends-slice";
 import PreviewMessage from "./PreviewMessage";
 import { useNavigate } from "react-router-dom";
 import getAxiosInstance from "../../../config/axios-config";
+import { LiaFrownSolid } from "react-icons/lia";
+import { Link } from "react-router-dom";
 
 const ChatBar = () => {
   const dispatch = useDispatch();
@@ -77,31 +79,60 @@ const ChatBar = () => {
         <h2 className='text-gray-600 font-semibold text-lg mb-2'>
           Discutez avec vos amis
         </h2>
-        <div className='flex items-center gap-3 overflow-x-auto pb-1'>
-          {Array.from(friendsList)
-            .sort((a, b) => +b.is_online - +a.is_online)
-            .map((friend) => (
-              <div
-                className='text-center relative cursor-pointer'
-                key={friend.id}
-                onClick={() => handleConversationStart(friend.id)}
-              >
-                <img
-                  src={friend.picture}
-                  alt={friend.firstname}
-                  className='w-14 h-14 rounded-full object-cover border-2 border-white shadow'
-                />
-                <span
-                  className={`absolute bottom-1 right-1 w-3 h-3 rounded-full border-2 border-white bg-gray-400 
-                ${Boolean(+friend.is_online) ? "bg-green-500" : "bg-gray-400"}`}
-                ></span>
-                <p className='text-xs mt-1 text-gray-700 font-medium w-14'>
-                  {friend.lastname.length > 10
-                    ? friend.lastname.slice(0, 5) + "..."
-                    : friend.lastname}
-                </p>
+        <div className={`flex items-center gap-3 overflow-x-auto pb-1 h-[100px] rounded-md ${friendsList.length === 0 ? "place-content-center":""}`}>
+          {friendsList.length === 0 && (
+            <div>
+              <p className='flex text-gray-400 text-center items-center'>
+                {" "}
+                Aucun ami pour le moment <LiaFrownSolid className='w-8 h-8' />{" "}
+              </p>
+              <div>
+                {" "}
+                <Link className='block  text-sm text-center font-semibold text-white mt-2 bg-emerald-500 p-1  rounded-md' to={"/contacts/"}>
+                  Voir des suggestions
+                </Link>
               </div>
-            ))}
+            </div>
+          )}
+          {/* si il n'y a pas de recherche en cours on retourne true toujours à filter */}
+          {/* de sorte de récupérer toutes les occurences */}
+          {friendsList.length > 0 &&
+            Array.from(friendsList)
+              .filter((friend) => {
+                if (!searchQuery) return true;
+                else
+                  return (
+                    friend.firstname
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase()) ||
+                    friend.lastname
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase())
+                  );
+              })
+              .sort((a, b) => +b.is_online - +a.is_online)
+              .map((friend) => (
+                <div
+                  className='text-center relative cursor-pointer'
+                  key={friend.id}
+                  onClick={() => handleConversationStart(friend.id)}
+                >
+                  <img
+                    src={friend.picture}
+                    alt={friend.firstname}
+                    className='w-14 h-14 rounded-full object-cover border-2 border-white shadow'
+                  />
+                  <span
+                    className={`absolute bottom-1 right-1 w-3 h-3 rounded-full border-2 border-white bg-gray-400 
+                ${Boolean(+friend.is_online) ? "bg-green-500" : "bg-gray-400"}`}
+                  ></span>
+                  <p className='text-xs mt-1 text-gray-700 font-medium w-14'>
+                    {friend.lastname.length > 10
+                      ? friend.lastname.slice(0, 5) + "..."
+                      : friend.lastname}
+                  </p>
+                </div>
+              ))}
         </div>
       </div>
 

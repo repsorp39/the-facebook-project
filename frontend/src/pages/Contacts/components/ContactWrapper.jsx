@@ -22,7 +22,7 @@ const ContactListWrapper = ({ listLength ,children ,setLimit}) => {
     <>
       <section
       ref={ref}
-        className='flex flex-wrap items-center content-center justify-center gap-8 mb-5'
+        className='flex flex-wrap items-center content-center justify-center  gap-8 mb-5'
       >
         { children }
       </section>

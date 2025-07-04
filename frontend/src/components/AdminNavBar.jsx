@@ -27,7 +27,7 @@ const AdminNavBar = () => {
 
   return (
     <header className='fixed top-0 w-full h-16 bg-white shadow-sm z-20 flex items-center justify-between px-6 border-b border-gray-200'>
-      {/* Logo & Rôle */}
+      {/* Logo & Role */}
       <section className='flex items-center gap-6'>
         <img
           src={logo}

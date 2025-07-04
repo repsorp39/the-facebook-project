@@ -107,8 +107,8 @@ const FriendRequest = () => {
             <span
               onClick={() => handleRejection(friend.id)}
               title="Retirer"
-              className='absolute top-0 left-0 m-3 group-hover:text-red-600 cursor-pointer'
-            >
+              className='absolute top-0 left-0 m-3 group-hover:bg-white p-2 rounded-full transition hover:text-red-600 cursor-pointer'
+              >
               <Trash2Icon className='w-6 h-5' />
             </span>
           </div>

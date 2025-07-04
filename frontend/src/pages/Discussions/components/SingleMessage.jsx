@@ -19,7 +19,7 @@ const SingleMessage = ({ message, userid }) => {
   let content = "";
   if (Boolean(+message.deleted)) {
     content = (
-      <span className='flex items-center text-sm bg-emerald-600 max-w-[240px] p-1 rounded-xl text-gray-600 italic'>
+      <span className='flex items-center text-sm bg-emerald-600 max-w-[240px] p-2 rounded-xl text-gray-600 italic'>
         <Ban className="w-4 h-4" /> <span>Ce message a été supprimé.</span>
       </span>
     );

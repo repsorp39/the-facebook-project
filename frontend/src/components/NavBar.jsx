@@ -45,7 +45,7 @@ const NavBar = () => {
   ];
   const pathname = useLocation().pathname;
   return (
-    <header className='fixed top-0 w-full h-16 bg-white shadow-sm z-20 flex items-center justify-between px-6 border-b border-gray-200'>
+    <header className='fixed hidden top-0 w-full h-16 bg-white shadow-sm z-20 md:flex items-center justify-between px-6 border-b border-gray-200'>
       {/* Logo */}
       <section className='flex items-center gap-6'>
         <img src={logo} alt='Logo' className='w-40 h-auto object-contain cursor-pointer' />

@@ -22,11 +22,18 @@ import UserManage from "./pages/Moderator/UserManage";
 import ArticleManage from "./pages/Moderator/ArticleManage";
 import ModeratorManagement from "./pages/Admin/ModeratorManagement";
 import Statistiques from "./pages/Admin/Statistiques";
+import CommonRoutes from "./components/CommonRoutes";
+import EmptyComponent from "./components/EmptyComponent";
+import { Loader } from "lucide-react";
+import SiteMark from "./components/SiteMark";
 
 function App() {
   const isLoading = useSelector((state) => state.auth.isLoading);
 
-  if (isLoading) return <div>Chargement de votre application...</div>;
+  if (isLoading) return <div className="min-h-[100vh]  overflow-x-auto">
+    <EmptyComponent message={"Chargement de Let's Chat"} Icon={Loader} />
+
+  </div>;
 
   return (
     <>
@@ -40,10 +47,14 @@ function App() {
             </Route>
             <Route path='/notifications' Component={Notifications} />
             <Route path='/contacts' Component={Contacts}>
-              <Route path='' Component={FriendRequest} index />
+              <Route path='' Component={FriendSuggestions} index  />
               <Route path='list' Component={FriendList} />
-              <Route path='suggestions' Component={FriendSuggestions} />
+              <Route path='request' index Component={FriendRequest} />
             </Route>
+          </Route>
+
+          {/* Routes for both admin,moderator  and simple logged in users */}
+          <Route element={<CommonRoutes />}>
             <Route path='/profile/:userid' Component={Profil} />
             <Route path='/settings' Component={Settings} />
           </Route>
@@ -61,7 +72,7 @@ function App() {
             <Route path='/admin/statistics' Component={Statistiques} />
           </Route>
 
-          {/* Routes for everyone */}
+          {/* Routes for everyone who is not logged in */}
           <Route path='/login' Component={Login} />
           <Route path='/confirm-email' Component={ConfirmEmail} />
           <Route path='/register' Component={Register} />

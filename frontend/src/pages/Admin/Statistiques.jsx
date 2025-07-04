@@ -5,6 +5,9 @@ const Statistiques = () => {
   return (
     <div>
       <AdminNavBar />
+      <div>
+        
+      </div>
     </div>
   );
 };

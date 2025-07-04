@@ -48,7 +48,7 @@ const Messages = ({ messages, friendinfo, messageBoxRef }) => {
       </section>
       <section
         ref={messageBoxRef}
-        className='flex flex-col h-[400px] overflow-y-auto bg-blue-50 px-3'
+        className='flex flex-col h-[450px] overflow-y-auto bg-blue-50 px-3'
       >
         {messages.map((message) => (
           <SingleMessage message={message} key={message.id} userid={userid} />
