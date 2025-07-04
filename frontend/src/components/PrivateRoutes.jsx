@@ -1,17 +1,23 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { isLoggedInSelector } from '../store/features/user-slice';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { isLoggedInSelector } from "../store/features/user-slice";
 
 function PrivateRoutes() {
+  const isModerator = useSelector((state) => state.auth.isModerator);
   const isLogin = useSelector(isLoggedInSelector);
   return (
-      <>
-        { 
-          isLogin ? <Outlet /> : <Navigate to="/login" replace />
-        }
-      </>
+    <>
+      {!isLogin ? (
+        <Navigate to='/login' replace />
+      ) : isModerator ? (
+        <Navigate to={"/moderator/users"} replace />
+      ) : (
+        <Outlet />
+      )}
+    </>
   );
 }
 
