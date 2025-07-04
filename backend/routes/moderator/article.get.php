@@ -1,10 +1,10 @@
 <?php
-require_once("../../../config/cors.php");
-require_once("../../../utils/serve-json.php");
-require("../../../utils/chech-token.php");
-require("../../../services/auth-service.php");
-require("../../../services/users-service.php");
-require("../../../services/users-service.php");
+require_once("../../config/cors.php");
+require_once("../../utils/serve-json.php");
+require("../../utils/chech-token.php");
+require("../../services/auth-service.php");
+require("../../services/users-service.php");
+require("../../services/users-service.php");
 
 
 use App\JSON\JSON;
