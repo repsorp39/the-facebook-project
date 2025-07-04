@@ -110,4 +110,38 @@ class User {
         $query = $this->bdd->query("SELECT * FROM users WHERE role = 2");
         return $query->fetchAll();
     }
+
+    public function getStatistics():array{
+        try{
+            $userStatsQuery = $this->bdd->prepare("
+            SELECT 
+                COUNT(*) as total_users,
+                SUM(CASE WHEN is_online = 1 THEN 1 ELSE 0 END) as online_users,
+                SUM(CASE WHEN role = 1 THEN 1 ELSE 0 END) as moderators_count,
+                SUM(CASE WHEN role = 2 THEN 1 ELSE 0 END) as admins_count
+            FROM users
+        ");
+            $userStatsQuery->execute();
+            $userStats = $userStatsQuery->fetch();
+
+            $postStatsQuery = $this->bdd->prepare("
+            SELECT 
+                COUNT(*) as total_posts,
+                MAX(created_at) as last_post_date
+            FROM posts
+        ");
+            $postStatsQuery->execute();
+            $postStats = $postStatsQuery->fetch();
+
+            return [
+                "total_users" => (int)$userStats["total_users"],
+                "online_users" => (int)$userStats["online_users"],
+                "moderators_count" => (int)$userStats["moderators_count"],
+                "admins_count" => (int)$userStats["admins_count"],
+                "total_posts" => (int)$postStats["total_posts"]
+            ];
+        }catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
 }

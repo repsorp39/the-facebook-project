@@ -130,6 +130,7 @@ class Post
         }
     }
 
+
     public function getfriendpost(string $postid): array
     {
         try {

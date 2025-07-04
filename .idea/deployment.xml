@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="ESGIS hackathon" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="ESGIS hackathon">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="E:/" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/var/www/devWorkstation/HACKATHON_ESGIS " />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

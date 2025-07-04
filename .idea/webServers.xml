@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e0a7550a-631d-404a-9f97-aac61c764dff" name="ESGIS hackathon">
+        <fileTransfer rootFolder="/var/www/devWorkstation/HACKATHON_ESGIS " accessType="SFTP" host="51.77.218.188" port="22" sshConfigId="62f5557b-6363-40d8-8408-096b0a7f76de" sshConfig="devuser@51.77.218.188:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
