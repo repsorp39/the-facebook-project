@@ -53,7 +53,7 @@ class StatService
         return (int)$stmt->fetchColumn();
     }
     /**
-     * Nombre total de posts
+     * Nombre total de commentaires
      */
     public function getTotalComments(): int
     {

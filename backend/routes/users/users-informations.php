@@ -7,7 +7,6 @@ require_once("../../services/friendship-service.php");
 require("../../utils/chech-token.php");
 
 use App\JSON\JSON;
-use App\UserService\User;
 use App\FriendShipService\FriendShip;
 use App\PostService\Post;
 

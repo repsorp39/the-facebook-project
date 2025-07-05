@@ -7,8 +7,6 @@ require_once("../../config/cors.php");
 use App\PostService\Post;
 use App\JSON\JSON;
 
-header('Content-Type: application/json');
-
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
