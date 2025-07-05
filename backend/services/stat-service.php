@@ -19,7 +19,7 @@ class StatService
      */
     public function getTotalUsers(): int
     {
-        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users");
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = '0' ");
         return (int)$stmt->fetchColumn();
     }
 
@@ -28,11 +28,11 @@ class StatService
      */
     public function getTotalModerators(): int
     {
-        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = 1");
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = '1'");
         return (int)$stmt->fetchColumn();
     }public function getTotalAdmin(): int
     {
-        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = 2");
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = '2'");
         return (int)$stmt->fetchColumn();
     }
 
@@ -44,14 +44,30 @@ class StatService
         $stmt = $this->bdd->query("SELECT COUNT(*) FROM posts");
         return (int)$stmt->fetchColumn();
     }
+    /**
+     * Nombre total de likes
+     */
+    public function getTotalLikes(): int
+    {
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM `like` l JOIN posts p ON p.post_id = l.post_id");
+        return (int)$stmt->fetchColumn();
+    }
+    /**
+     * Nombre total de posts
+     */
+    public function getTotalComments(): int
+    {
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM comments");
+        return (int)$stmt->fetchColumn();
+    }
 
     /**
-     * Informations sur les 10 derniers utilisateurs enregistrés
+     * Informations sur les n derniers utilisateurs enregistrés
      */
-    public function getLastUsers(int $count = 10): array
+    public function getLastUsers(int $limit = 10): array
     {
-        $stmt = $this->bdd->prepare("SELECT * FROM users ORDER BY id DESC LIMIT :count");
-        $stmt->bindValue(':count', $count, PDO::PARAM_INT);
+        $stmt = $this->bdd->prepare("SELECT * FROM users ORDER BY id DESC LIMIT :limit");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -61,7 +77,7 @@ class StatService
      */
     public function getOnlineUsersCount(): int
     {
-        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE is_online = 1");
+        $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE is_online = '1'");
         return (int)$stmt->fetchColumn();
     }
 
@@ -73,10 +89,13 @@ class StatService
         return [
             'total_users'      => $this->getTotalUsers(),
             'total_moderators' => $this->getTotalModerators(),
-            'total_admins' => $this->getTotalAdmin(),
+            'total_admins'     => $this->getTotalAdmin(),
             'total_posts'      => $this->getTotalPosts(),
-            'last_users'       => $this->getLastUsers(10),
-            'online_users'     => $this->getOnlineUsersCount()
+            'last_users'       => $this->getLastUsers(5),
+            'online_users'     => $this->getOnlineUsersCount(),
+            'total_likes'      => $this->getTotalLikes(),
+            'total_comments'   => $this->getTotalComments()
+
         ];
     }
 }

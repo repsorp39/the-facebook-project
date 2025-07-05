@@ -1,15 +1,13 @@
 <?php
-header('Content-Type: application/json');
-
-require_once(__DIR__ . '/../../../services/stat-service.php');
+require_once("../../config/cors.php");
+require_once("../../utils/serve-json.php");
+require_once("../../services/stat-service.php");
 
 use App\StatService\StatService;
+use App\JSON\JSON;
 
-$statService = new StatService();
-
-$stats = $statService->getStats();
-
-echo json_encode([
-    'success' => true,
-    'data' => $stats
-]);
+if($_SERVER['REQUEST_METHOD'] === "GET"){
+    $statService = new StatService();
+    $stats = $statService->getStats();
+    JSON::serve(200,['data' => $stats]);
+}
