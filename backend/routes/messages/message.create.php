@@ -32,10 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 return JSON::serve(500,["message" => "Une erreur est survenue lors de l'upload"]);
                 exit;
             }
-            $mimeType = mime_content_type($_FILES["media"]["tmp_name"]);
-            if (!str_starts_with($mimeType, $type)) {
-                return JSON::serve(400, ["message" => "Le fichier envoyé ne correspond pas au type spécifié"]);
-            }
+            // $mimeType = mime_content_type($_FILES["media"]["tmp_name"]);
+            // echo $mimeType .' '. $type;
+            // if (!str_starts_with($mimeType, $type)) {
+            //     return JSON::serve(400, ["message" => "Le fichier envoyé ne correspond pas au type spécifié"]);
+            // }
             $content = handleUpload($_FILES["media"], $type);
         }
 

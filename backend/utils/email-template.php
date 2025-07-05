@@ -81,7 +81,7 @@
         <html lang="fr">
         <head>
         <meta charset="UTF-8">
-        <title>Confirmation Email - Let's Chat</title>
+        <title>Password Reset - Let's Chat</title>
         <style>
             body {
             margin: 0;
