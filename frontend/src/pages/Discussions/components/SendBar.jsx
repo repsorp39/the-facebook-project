@@ -102,7 +102,7 @@ const SendBar = ({ friendid }) => {
           )}
         </span>
       </div>
-      {media.url && (
+      {(media.url && media.type != "audio") && (
         <MediaPreview media={media} resetInputForm={resetFormInput} />
       )}
     </>

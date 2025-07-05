@@ -12,3 +12,9 @@
   -ms-overflow-style: none;  /* Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+audio {
+  filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
+  width: 230px;
+  height: 35px;
+}

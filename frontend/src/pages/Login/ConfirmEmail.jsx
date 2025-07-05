@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../config/axios-config";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import getAxiosInstance from "../../config/axios-config";
 
 const ConfirmEmail = () => {
+  const http = getAxiosInstance();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [successfull, setSuccessful] = useState(false);
   const navigate = useNavigate();
@@ -15,14 +17,14 @@ const ConfirmEmail = () => {
       const formData = new FormData();
       formData.append("email", email);
       formData.append("token", token);
-      const res = await axios.post("/users/user.confirm-email.php", formData);
+      const res = await http.post("/users/user.confirm-email.php", formData);
       setSuccessful(true);
     } catch (err) {
       setSuccessful(false);
     } finally {
       setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 4000);
     }
   }
 

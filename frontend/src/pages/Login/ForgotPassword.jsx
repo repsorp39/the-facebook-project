@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import getAxiosInstance from "../../config/axios-config";
+import toast from "react-hot-toast";
 
 function ForgotPassword({ setOpenForgetPasswordModal }) {
   const http = getAxiosInstance();
@@ -33,6 +34,7 @@ function ForgotPassword({ setOpenForgetPasswordModal }) {
       const data = new FormData(e.target);
       data.append("email",email);
       await http.post("/users/user.forgot-password.php", data);
+      toast.success("Mot de passe changé!",{ duration:3000});
       setOpenForgetPasswordModal(false);
     } catch (err) {
       setError("Code entrer incorrecte ou déjà expiré!");

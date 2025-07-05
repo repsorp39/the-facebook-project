@@ -67,7 +67,7 @@ const SingleMessage = ({ message, userid }) => {
           <span>
             <Trash2
               onClick={handleDelete}
-              className='w-5 h-5 absolute hover:bg-red-400 left-0 bg-white p-1 rounded-full text-red-600 hidden group-hover:inline-block transition-all ease-out cursor-pointer'
+              className='w-5 h-5 z-50 absolute hover:bg-red-400 left-0 bg-white p-1 rounded-full text-red-600 hidden group-hover:inline-block transition-all ease-out cursor-pointer'
             />
           </span>
         )}
