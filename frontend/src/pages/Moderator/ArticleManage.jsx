@@ -3,32 +3,19 @@ import AdminNavBar from "../../components/AdminNavBar";
 import getAxiosInstance from "../../config/axios-config";
 import toast from "react-hot-toast";
 import SingleArticle from "../Home/components/SingleArticle";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts,deletePost } from "../../store/features/posts-slice";
 
 const ArticleManage = () => {
-  const http = getAxiosInstance();
-
+  const dispatch = useDispatch();
+  const posts = useSelector(state => state.posts.posts);
   const defaultLimit = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [posts, setPosts] = useState([]);
 
   const totalPages = new Array(Math.ceil(posts.length / defaultLimit)).fill(0);
 
-  async function onDelete(postid) {
-    const filteredPosts = posts.filter((post) => post.post_id != postid);
-    setPosts(filteredPosts);
-  }
-
-  async function fetchPosts() {
-    try {
-      const res = await http.get("/articles/article.get.php");
-      setPosts(res.data);
-    } catch (error) {
-      toast.error("Une erreur est survenue!");
-    }
-  }
-
   useEffect(() => {
-    fetchPosts();
+    dispatch(fetchPosts());
   }, []);
 
   return (
@@ -55,7 +42,7 @@ const ArticleManage = () => {
                   key={post.post_id}
                   post={post}
                   moderatorAction={() => {
-                    onDelete(post.post_id);
+                   dispatch( deletePost(post.post_id))
                   }}
                 />
               ))}
