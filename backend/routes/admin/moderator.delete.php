@@ -11,15 +11,19 @@ use App\AuthService\Auth;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
-    $userid = decodeTokenFromHeader();
-    $Auth = new Auth($userid);
+    try {
+        $userid = decodeTokenFromHeader();
+        $Auth = new Auth($userid);
 
-    if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
-    if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
+        if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
+        if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
-    $User = new User();
-    $id = $_GET["id"] ?? "";
-    if(!$id) return JSON::serve(400, ["message" => "id requis"]);   
-    $User->removeModerator($id);
-    JSON::serve(200,["message" => "Utilisateur retiré"]);
+        $User = new User();
+        $id = $_GET["id"] ?? "";
+        if(!$id) return JSON::serve(400, ["message" => "id requis"]);   
+        $User->removeModerator($id);
+        JSON::serve(200,["message" => "Utilisateur retiré"]);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

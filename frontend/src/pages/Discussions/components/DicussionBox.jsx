@@ -42,6 +42,7 @@ const DicussionBox = () => {
 
   async function fetchChatWithFriend() {
     try {
+      if(isLoading) return;
       setLoading(true);
       const { data: friendinfo } = await http.get(
         `/users/user.get.php?id=${friendId}`
@@ -52,6 +53,7 @@ const DicussionBox = () => {
     } catch (error) {
       console.log(error);
       toast.error("Une erreur est survenue ");
+      setLoading(false);
     }
   }
 

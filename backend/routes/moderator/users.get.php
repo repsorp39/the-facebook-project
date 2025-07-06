@@ -11,13 +11,17 @@ use App\AuthService\Auth;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $userid = decodeTokenFromHeader();
-    $Auth = new Auth($userid);
+    try {
+        $userid = decodeTokenFromHeader();
+        $Auth = new Auth($userid);
 
-    if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
-    if (!$Auth->isModerator()) return JSON::serve(403, ["message" => "Acces interdit"]);
+        if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
+        if (!$Auth->isModerator()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
-    $User = new User();
-    $users = $User->getAllAvailableUsers();
-    JSON::serve(200,$users);
+        $User = new User();
+        $users = $User->getAllAvailableUsers();
+        JSON::serve(200,$users);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }
