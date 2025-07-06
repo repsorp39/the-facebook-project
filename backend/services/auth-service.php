@@ -18,25 +18,29 @@ class Auth
          $this->id = $id;
     }
 
-    public function isAdmin(){
-        $User=new User();
+    public function isAdmin()
+    {
 
-        $foundUser=$User->getById($this->id);
+        $User = new User();
 
-        if(!$foundUser)return false;
+        $foundUser = $User->getById($this->id);
 
-        if($foundUser["role"]==2) return true;
+        if (!$foundUser) return false;
+
+        if ($foundUser["role"] == 2) return true;
         else return false;
     }
 
-    public function isModerator(){
-        $User=new User();
-        
-        $foundUser=$User->getById($this->id);
-        
-        if(!$foundUser)return false;
-        
-        if($foundUser["role"]==1 || $foundUser["role"]=2) return true;
+    public function isModerator()
+    {
+
+        $User = new User();
+
+        $foundUser = $User->getById($this->id);
+
+        if (!$foundUser) return false;
+
+        if ($foundUser["role"] == 1 || $foundUser["role"] == 2) return true;
         else return false;
     }
     

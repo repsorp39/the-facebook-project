@@ -30,7 +30,9 @@ class StatService
     {
         $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = 1");
         return (int)$stmt->fetchColumn();
-    }public function getTotalAdmin(): int
+    }
+    
+    public function getTotalAdmin(): int
     {
         $stmt = $this->bdd->query("SELECT COUNT(*) FROM users WHERE role = 2");
         return (int)$stmt->fetchColumn();
