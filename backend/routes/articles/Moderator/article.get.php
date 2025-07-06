@@ -13,14 +13,18 @@ use App\PostService\Post;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $userid = decodeTokenFromHeader();
-    $Auth = new Auth($userid);
+    try {
+        $userid = decodeTokenFromHeader();
+        $Auth = new Auth($userid);
 
-    if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
-    if (!$Auth->isModerator()) return JSON::serve(403, ["message" => "Acces interdit"]);
+        if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
+        if (!$Auth->isModerator()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
-    $Post = new Post();
-    $posts=$Post->getAll( );
-    if (empty($posts)) return JSON::serve(401, ["message" => "Erreur lors de la recuperation des posts"]);
-    else return JSON::serve(401, ["message" => "Recuperation reussie"]);
+        $Post = new Post();
+        $posts=$Post->getAll( );
+        if (empty($posts)) return JSON::serve(401, ["message" => "Erreur lors de la recuperation des posts"]);
+        else return JSON::serve(401, ["message" => "Recuperation reussie"]);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

@@ -21,6 +21,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         $User->update($foundUser);
         JSON::serve(200,["message" => "Mot de passe modifiée"]);
     }catch(Exception $e){
-        JSON::serve(500,["message" => $e->getMessage()]);
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 }   

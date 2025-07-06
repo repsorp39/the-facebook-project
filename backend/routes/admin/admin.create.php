@@ -13,21 +13,25 @@ use App\PostService\Post;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
-    $userid = decodeTokenFromHeader();
-    $Auth = new Auth($userid);
+    try {
+        $userid = decodeTokenFromHeader();
+        $Auth = new Auth($userid);
 
-    if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
-    if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
+        if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
+        if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
-    $User = new User();
-    $data = json_decode(file_get_contents('php://input'), true);
+        $User = new User();
+        $data = json_decode(file_get_contents('php://input'), true);
 
-    if (isset($data["ids"]) && is_array($data["ids"])) {
-        foreach ($data["ids"] as $id) {
-            $User->createadmin($id);
+        if (isset($data["ids"]) && is_array($data["ids"])) {
+            foreach ($data["ids"] as $id) {
+                $User->createadmin($id);
+            }
+            return JSON::serve(200, ["message" => "Admin créé avec succès"]);
+        } else {
+            return JSON::serve(400, ["message" => "Echec lors de la création de l'admin"]);
         }
-        return JSON::serve(200, ["message" => "Admin créé avec succès"]);
-    } else {
-        return JSON::serve(400, ["message" => "Echec lors de la création de l'admin"]);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 }

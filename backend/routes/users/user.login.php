@@ -35,7 +35,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             "token" => $token
         ]);
     } catch (Exception $e) {
-        http_response_code(500);
-        echo $e->getMessage();
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 }

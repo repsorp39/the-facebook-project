@@ -13,13 +13,17 @@ use App\PostService\Post;
 use App\UserService\User;
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $userid = decodeTokenFromHeader();
-    $Auth = new Auth($userid);
+    try {
+        $userid = decodeTokenFromHeader();
+        $Auth = new Auth($userid);
 
-    if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
-    if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
+        if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
+        if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
 
-    $User = new User();
-    $Moderators = $User->getAllModerators();
-    JSON::serve(200, $Moderators);
+        $User = new User();
+        $Moderators = $User->getAllModerators();
+        JSON::serve(200, $Moderators);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

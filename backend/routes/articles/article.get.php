@@ -33,6 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             JSON::serve(200, $articles);
         }
     } catch (Exception $e) {
-        JSON::serve(500, ['error' => $e->getMessage()]);
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 }
