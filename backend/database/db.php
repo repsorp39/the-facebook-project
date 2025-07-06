@@ -1,8 +1,24 @@
 <?php
+// function database():PDO{
+//     try{
+//         $bdd = new PDO("mysql:host=127.0.0.1;dbname=php_social_network","root","");
+//         $bdd -> setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+//         return $bdd;
+//     }catch(PDOException $e){
+//         die($e->getMessage());
+//     }
+// }
 function database():PDO{
     try{
-        $bdd = new PDO("mysql:host=127.0.0.1;dbname=php_social_network","root","");
-        $bdd -> setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        $host = 'switchyard.proxy.rlwy.net';      // Host Railway
+        $port = '16014';                          // Port Railway
+        $dbname = 'railway';                      // Nom de la base Railway
+        $username = 'root';                       // User Railway
+        $password = 'PPFwyOgskemegmWLKAgoaBONJRXRSLdm';   // Mot de passe Railway
+
+        $bdd = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $bdd->exec("SET NAMES utf8mb4");
         return $bdd;
     }catch(PDOException $e){
         die($e->getMessage());

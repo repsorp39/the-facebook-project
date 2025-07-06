@@ -91,7 +91,7 @@ class FriendShip
                           SELECT user_id1  
                           FROM friendship 
                           WHERE user_id2 = ? AND state = 'waiting'
-                          ORDER BY created_at DESC
+                          
                       )";
             $stmt = $this->bdd->prepare($query);
             $stmt->execute([$this->userid]);
@@ -111,7 +111,7 @@ class FriendShip
                 SELECT user_id2 FROM friendship WHERE user_id1 = :id 
                 UNION 
                 SELECT user_id1 FROM friendship  WHERE user_id2 = :id 
-                ORDER BY created_at DESC
+                
             )";
             $stmt = $this->bdd->prepare($query);
             $stmt->execute(["id" => $this->userid]);
