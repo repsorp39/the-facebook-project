@@ -25,7 +25,7 @@ class Email {
 
             //Content
             $mail->isHTML(true);                       
-            $mail->Subject = "Email confirmation";
+            $mail->Subject =  $type === "confirmation" ? "Email confirmation" :"Changement de mot de passe";
             $mail->Body    = $type === "confirmation"
                      ? getAccountConfirmTemplate($user["firstname"],$secret)
                      : getPasswordResetTemplate("" ,$secret);

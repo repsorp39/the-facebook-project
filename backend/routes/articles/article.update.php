@@ -9,7 +9,7 @@ use App\JSON\JSON;
 
 
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-        //recuperation des donnees json
+        //recuperation des donnees 
     $input = $_POST;
 
     $userid = decodeTokenFromHeader();

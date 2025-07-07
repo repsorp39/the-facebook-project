@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef,useCallback } from "react";
 import { UsersRound } from "lucide-react";
 import getAxiosInstance from "../../../config/axios-config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import MessageLoader from "./MessageLoader";
 import Messages from "./Messages";
 
 const DicussionBox = () => {
   const http = getAxiosInstance();
+  const navigate = useNavigate();
   // discussionid come from my navbar and it is a string
   //the default value for discussionid is 0
   //so we can show an empty discussion box if the friendid doesn't match any real value
@@ -52,8 +53,9 @@ const DicussionBox = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      toast.error("Une erreur est survenue ");
       setLoading(false);
+      navigate("/discussions/0")
+      toast.error("Une erreur est survenue lors de la récupération des messages");
     }
   }
 

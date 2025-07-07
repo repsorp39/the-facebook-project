@@ -22,9 +22,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             return JSON::serve(400, ["message" => "Tous les champs sont requis"]);
         }
 
-        $allowedTypes = ["video", "audio", "text", "image"];
-        if (!in_array($type, $allowedTypes)) {
-            return JSON::serve(400, ["message" => "Types autorisés: video,audio,text"]);
+
+    $allowedTypes = ["video", "audio", "text", "image"];
+    if (!in_array($type, $allowedTypes)) {
+        return JSON::serve(400, ["message" => "Types autorisés: video,audio,text"]);
+    }
+        //cas ou ce serait un media
+        if (array_key_exists("media", $_FILES))  {
+            //si une erreur survient
+            if($_FILES["media"]["error"] === 1){
+                return JSON::serve(500,["message" => "Une erreur est survenue lors de l'upload"]);
+                exit;
+            }
+            // $mimeType = mime_content_type($_FILES["media"]["tmp_name"]);
+            // echo $mimeType .' '. $type;
+            // if (!str_starts_with($mimeType, $type)) {
+            //     return JSON::serve(400, ["message" => "Le fichier envoyé ne correspond pas au type spécifié"]);
+            // }
+            $content = handleUpload($_FILES["media"], $type);
         }
             //cas ou ce serait un media
             if (array_key_exists("media", $_FILES))  {

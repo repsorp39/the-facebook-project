@@ -123,6 +123,8 @@ const userReducer= createSlice({
 
     builder.addCase(logoutUser.fulfilled,(state) =>{
       state.isLoggedIn = false;
+      state.isAdmin = false;
+      state.isModerator= false;
     })
   }
 })

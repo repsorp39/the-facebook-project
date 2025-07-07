@@ -25,15 +25,16 @@ import Statistiques from "./pages/Admin/Statistiques";
 import CommonRoutes from "./components/CommonRoutes";
 import EmptyComponent from "./components/EmptyComponent";
 import { Loader } from "lucide-react";
-import SiteMark from "./components/SiteMark";
 
 function App() {
   const isLoading = useSelector((state) => state.auth.isLoading);
 
-  if (isLoading) return <div className="min-h-[100vh]  overflow-x-auto">
-    <EmptyComponent message={"Chargement de Let's Chat"} Icon={Loader} />
-
-  </div>;
+  if (isLoading)
+    return (
+      <div className='min-h-[100vh] overflow-x-auto place-content-center'>
+        <EmptyComponent message={"Chargement de Let's Chat"} Icon={Loader} />
+      </div>
+    );
 
   return (
     <>
@@ -47,7 +48,7 @@ function App() {
             </Route>
             <Route path='/notifications' Component={Notifications} />
             <Route path='/contacts' Component={Contacts}>
-              <Route path='' Component={FriendSuggestions} index  />
+              <Route path='' Component={FriendSuggestions} index />
               <Route path='list' Component={FriendList} />
               <Route path='request' index Component={FriendRequest} />
             </Route>

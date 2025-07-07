@@ -19,9 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (!$userid) return JSON::serve(401, ["message" => "Connexion requise"]);
         if (!$Auth->isAdmin()) return JSON::serve(403, ["message" => "Acces interdit"]);
-
         $User = new User();
-        $id= $_POST["id"] ?? "" ;
+        $id = $_POST["id"] ?? "" ;
 
         if(!$id) return JSON::serve(400, ["message" => "id requis"]);
         if($User->createmoderator($id)) 

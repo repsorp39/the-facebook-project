@@ -8,11 +8,7 @@ require_once __DIR__ . '/../../services/auth-service.php';
 
 use App\PostService\Post;
 use App\AuthService\Auth;
-
 use App\JSON\JSON;
-
-
-header('Content-Type: application/json');
 
 if($_SERVER['REQUEST_METHOD'] === "DELETE"){
     try {

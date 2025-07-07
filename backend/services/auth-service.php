@@ -20,27 +20,18 @@ class Auth
 
     public function isAdmin()
     {
-
         $User = new User();
-
         $foundUser = $User->getById($this->id);
-
-        if (!$foundUser) return false;
-
-        if ($foundUser["role"] == 2) return true;
+        if(!$foundUser) return false;
+        if($foundUser["role"] == 2) return true;
         else return false;
     }
 
-    public function isModerator()
-    {
-
+    public function isModerator(){
         $User = new User();
-
         $foundUser = $User->getById($this->id);
-
-        if (!$foundUser) return false;
-
-        if ($foundUser["role"] == 1 || $foundUser["role"] == 2) return true;
+        if(!$foundUser) return false;
+        if($foundUser["role"] == 1 || $foundUser["role"] == 2) return true;
         else return false;
     }
     
