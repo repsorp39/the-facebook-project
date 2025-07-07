@@ -9,14 +9,18 @@ use App\FriendShipService\FriendShip;
 
 
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-    $userid = decodeTokenFromHeader();
-    if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
+    try {
+        $userid = decodeTokenFromHeader();
+        if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
 
-    $id = $_POST["id"] ?? "";
-    if(!$id) return JSON::serve(400,["message"=>"id requis"]);
+        $id = $_POST["id"] ?? "";
+        if(!$id) return JSON::serve(400,["message"=>"id requis"]);
 
-    $Friendship  = new FriendShip($userid);
-    $success = $Friendship->confirmRequestFrom($id);
-   if($success) JSON::serve(200,["message" => "Amitié confirmée"]);
-   else JSON::serve(500,['message'=>"Some errors occurs"]);
+        $Friendship  = new FriendShip($userid);
+        $success = $Friendship->confirmRequestFrom($id);
+       if($success) JSON::serve(200,["message" => "Amitié confirmée"]);
+       else JSON::serve(500,['message'=>"Some errors occurs"]);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

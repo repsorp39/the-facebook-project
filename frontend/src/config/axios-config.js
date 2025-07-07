@@ -4,7 +4,7 @@ let axiosInstance = null;
 function getAxiosInstance(){
   if(!axiosInstance){
     return axios.create({
-      baseURL:"http://localhost:8080/routes/",
+      baseURL:"https://social-network-6.onrender.com/routes/",
       headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }

@@ -11,7 +11,6 @@ require_once(__DIR__ . '/../utils/email-template.php');
 
 class Email {
     public static function send ($user,$secret,$type){
-        try {
             $mail = new PHPMailer(true);
             $mail->isSMTP();                                            
             $mail->Host       = 'smtp.gmail.com';                     
@@ -30,10 +29,6 @@ class Email {
             $mail->Body    = $type === "confirmation"
                      ? getAccountConfirmTemplate($user["firstname"],$secret)
                      : getPasswordResetTemplate("" ,$secret);
-            $mail->send();
-
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
+            $mail->send(); 
     }
 }

@@ -8,13 +8,17 @@ use App\JSON\JSON;
 use App\UserService\User;
 
 if($_SERVER["REQUEST_METHOD"] === "DELETE"){
-    $userid = decodeTokenFromHeader();
-    if(!$userid) return JSON::serve(401,["message"=>"Not allowed!"]);
+    try {
+        $userid = decodeTokenFromHeader();
+        if(!$userid) return JSON::serve(401,["message"=>"Not allowed!"]);
 
-    $User = new User();
+        $User = new User();
 
-    $foundUser = $User->getById($userid);
-    $foundUser["is_online"] = 0;
-    $User->update($foundUser);
-    JSON::serve(200,["message"=>"Disconnected"]);
+        $foundUser = $User->getById($userid);
+        $foundUser["is_online"] = 0;
+        $User->update($foundUser);
+        JSON::serve(200,["message"=>"Disconnected"]);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

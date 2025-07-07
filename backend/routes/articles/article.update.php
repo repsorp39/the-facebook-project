@@ -39,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             JSON::serve(400, ['error' => 'Failed to update article']);
         }
     } catch (Exception $e) {
-        JSON::serve(500, ['error' => $e->getMessage()]);
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 
 }

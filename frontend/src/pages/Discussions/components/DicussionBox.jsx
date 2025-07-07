@@ -43,6 +43,7 @@ const DicussionBox = () => {
 
   async function fetchChatWithFriend() {
     try {
+      if(isLoading) return;
       setLoading(true);
       const { data: friendinfo } = await http.get(
         `/users/user.get.php?id=${friendId}`

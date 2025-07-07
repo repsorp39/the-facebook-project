@@ -9,9 +9,13 @@ use App\FriendShipService\FriendShip;
 
 
 if($_SERVER["REQUEST_METHOD"] === "GET"){
-    $userid = decodeTokenFromHeader();
-    if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
-    $Friendship  = new FriendShip($userid);
-    $friends = $Friendship->getFriendshipList();
-    JSON::serve(200,$friends);
+    try {
+        $userid = decodeTokenFromHeader();
+        if(!$userid) return JSON::serve(401,["message"=>"Connexion requise"]);
+        $Friendship  = new FriendShip($userid);
+        $friends = $Friendship->getFriendshipList();
+        JSON::serve(200,$friends);
+    } catch (Exception $e) {
+        JSON::serve(500, ["error" => $e->getMessage()]);
+    }
 }

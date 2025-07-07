@@ -70,6 +70,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
         JSON::serve($status,$response);
     } catch (Exception $e) {
-        die($e->getMessage());
+        JSON::serve(500, ["error" => $e->getMessage()]);
     }
 }
