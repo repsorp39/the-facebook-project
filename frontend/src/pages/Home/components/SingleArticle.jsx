@@ -50,7 +50,7 @@ const SingleArticle = ({ post, moderatorAction }) => {
   async function handleDelete(id) {
     try {
       toast.loading("Suppression d'un post...", {
-        position:'top-center',
+        position: "top-center",
         style: {
           background: "#363636",
           color: "#ff0000",
@@ -67,8 +67,7 @@ const SingleArticle = ({ post, moderatorAction }) => {
       toast.success("Post supprimé!");
     } catch (error) {
       toast.error("Une erreur est survenue lors de la suppression!");
-    }
-    finally{
+    } finally {
       toast.dismiss();
     }
   }
@@ -76,7 +75,7 @@ const SingleArticle = ({ post, moderatorAction }) => {
   async function handleEdit(id) {
     try {
       toast.loading("Modification d'un post...", {
-        position:'top-center',
+        position: "top-center",
         style: {
           background: "#363636",
           color: "#fff",
@@ -283,7 +282,24 @@ const SingleArticle = ({ post, moderatorAction }) => {
           <MessageCircle className='w-4 h-4' />
           <span>Commenter</span>
         </button>
-        <button className='flex items-center gap-2 hover:text-green-600 transition'>
+        <button
+          onClick={() => {
+            toast.dismiss();
+            toast.loading(
+              "Cette fonctionnalité sera bientôt disponible dans votre application",
+              {
+                position: "top-center",
+                className:"bg-gray-500 font-bold text-white"
+              }
+            );
+            
+            setTimeout(()=>{
+              toast.dismiss();
+            },1500)
+
+          }}
+          className='flex items-center gap-2 hover:text-green-600 transition'
+        >
           <Forward className='w-4 h-4' />
           <span>Partager</span>
         </button>

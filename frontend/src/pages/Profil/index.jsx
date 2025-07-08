@@ -189,8 +189,8 @@ const Profil = () => {
                   </div>
                 </div>
               </div>
-              <article className='flex flex-col content-center justify-center items-center md:flex-row  md:justify-between'>
-                <div className='min-w-[260px] self-start group block rounded-xl  bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 '>
+              <article className='flex flex-col content-center justify-center items-center place-content-center mt-3  md:flex-row  md:justify-between'>
+                <div className='min-w-[260px] self-start group block rounded-xl bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 '>
                   <div className='flex items-center gap-4'>
                     <div className='p-2 bg-blue-100 text-blue-600 rounded-full'>
                       <Mail />
