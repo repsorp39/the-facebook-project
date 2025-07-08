@@ -18,11 +18,11 @@ function handleUpload($file,$type){
 
               return $serverUrl."/upload/$type"."s/".$fileName;
             } else {
-              throw new Exception("Une erreur est survenue");
+              throw new Exception("Une erreur est survenue lors du move_");
             }
         }
   } else {
-    throw new Exception("Une erreur est survenue");
+    throw new Exception("Erreur lors de l'upload.");
   }
   }catch(Exception $e){
       die($e->getMessage());

@@ -97,7 +97,6 @@ class StatService
             'online_users'     => $this->getOnlineUsersCount(),
             'total_likes'      => $this->getTotalLikes(),
             'total_comments'   => $this->getTotalComments()
-
         ];
     }
 }
