@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchFriendsSuggestions,
-  friendsSuggestionsSelector,
-  removeSuggestions,
-} from "../../../store/features/friends-slice";
 import EmptyComponent from "../../../components/EmptyComponent";
 import { PersonStanding } from "lucide-react";
 import getAxiosInstance from "../../../config/axios-config";
 import toast from "react-hot-toast";
 import ContactCardSuggestion from "./ContactCardSuggestion";
 import ContactListWrapper from "./ContactWrapper";
+import {
+  fetchFriendsSuggestions,
+  friendsSuggestionsSelector,
+  removeSuggestions,
+} from "../../../store/features/friends-slice";
+import Loader from "../../../components/Loader";
 
 const FriendSuggestions = () => {
   const dispatch = useDispatch();
@@ -19,12 +20,18 @@ const FriendSuggestions = () => {
 
   const friendsSuggestions = useSelector(friendsSuggestionsSelector);
   const [limit, setLimit] = useState(6);
+  const isLoading = useSelector(state => state.friends.isFetchingSuggestion);
+
 
   useEffect(() => {
     dispatch(fetchFriendsSuggestions());
   }, []);
 
-  if (friendsSuggestions.length === 0)
+  if(isLoading){
+    return <Loader message={"Chargement des suggestions d'amis"} />
+  }
+
+  if (!isLoading &&  friendsSuggestions.length === 0 )
     return (
       <EmptyComponent
         Icon={PersonStanding}

@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { FaPlus } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import Modal from "../../components/Modal";
-
+import { PersonStanding } from "lucide-react";
 
 const UserManage = () => {
   const http = getAxiosInstance();
@@ -39,18 +39,28 @@ const UserManage = () => {
 
   async function fetchUsers() {
     try {
+      toast.dismiss();
+      toast.loading("Chargement des utilisateurs", {
+        position: "top-center",
+        style: { background: "black", color: "#fff" },
+      });
       const res = await http.get("/moderator/users.get.php");
+      toast.dismiss();
       setUsers(res.data);
     } catch (error) {
+      toast.dismiss();
       console.log(error);
-    }
+      toast.error("Une erreur est survenue");
+    } 
   }
 
   async function handleDelete() {
     try {
-      await http.delete(`/moderator/user-delete.php?id=${id}`);
-      toast.success("Un utilisateur supprimé");
-
+      toast.loading("Suppression d'un utilisateur", {
+        position: "top-center",
+        style: { background: "black", color: "red" },
+      });
+      await http.delete(`/moderator/user-delete.php?id=${id}`);      
       //remove the users locally
       const filteredUsers = users.filter((user) => user.id != id);
       setUsers(filteredUsers);
@@ -64,6 +74,10 @@ const UserManage = () => {
 
   async function addModerator() {
     try {
+      toast.loading("Ajout d'un modérateur", {
+        position: "top-center",
+        style: {  color: "green" },
+      });
       const formData = new FormData();
       formData.append("id", id);
 
@@ -102,6 +116,7 @@ const UserManage = () => {
     setDeleteModalOpen(false);
     setModeratorModalOpen(false);
     setId("");
+    toast.dismiss();
   };
 
   useEffect(() => {
@@ -112,7 +127,9 @@ const UserManage = () => {
       <AdminNavBar />
       <div
         className={`min-h-screen bg-slate-200 py-8 mt-10 ${
-          (isDeleteModalOpen || isModeratorModalOpen) ? "blur-sm brightness-50 pointer-events-none" : ""
+          isDeleteModalOpen || isModeratorModalOpen
+            ? "blur-sm brightness-50 pointer-events-none"
+            : ""
         }`}
       >
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto'>
@@ -136,7 +153,6 @@ const UserManage = () => {
                   ))}
                 </tr>
               </thead>
-
               <tbody className='text-gray-700 text-sm'>
                 {Array.from(users)
                   .slice(0, limit)
@@ -230,6 +246,14 @@ const UserManage = () => {
                 </tr>
               </tbody>
             </table>
+            {users.length === 0 && (
+              <div className='w-full flex flex-col items-center flex-grow justify-center bg-red-40 text-gray-500 font-semibold p-2 place-content-center'>
+                <div className='w-[250px] h-[100px] mx-auto flex flex-col items-center justify-center '>
+                  {" "}
+                  <PersonStanding /> Aucun utilisateurs trouvés{" "}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -254,6 +278,5 @@ const UserManage = () => {
     </div>
   );
 };
-
 
 export default UserManage;

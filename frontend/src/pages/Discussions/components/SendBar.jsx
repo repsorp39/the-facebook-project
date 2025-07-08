@@ -38,6 +38,10 @@ const SendBar = ({ friendid }) => {
 
   async function sendMessage() {
     try {
+      toast.loading("Envoi du message", {
+        position: "top-center",
+        style: { color: "green" },
+      });
       const http = getAxiosInstance();
       const formData = new FormData();
       formData.append("user_id", friendid);
@@ -48,9 +52,11 @@ const SendBar = ({ friendid }) => {
         formData.append("description", inputContent);
         formData.append("media", media.file);
       }
-      
+
       await http.post("/messages/message.create.php", formData);
+      toast.dismiss();
     } catch (err) {
+      toast.dismiss();
       toast.error("Une erreur est survenue lors de l'upload");
       console.log(err);
     } finally {
@@ -64,9 +70,9 @@ const SendBar = ({ friendid }) => {
   }
 
   //send the audio note as soon as the audio is stopped
-  useEffect(()=>{
-    if(media.file && media.type === "audio") sendMessage();
-  },[media.file]);
+  useEffect(() => {
+    if (media.file && media.type === "audio") sendMessage();
+  }, [media.file]);
 
   return (
     <>
@@ -102,7 +108,7 @@ const SendBar = ({ friendid }) => {
           )}
         </span>
       </div>
-      {(media.url && media.type != "audio") && (
+      {media.url && media.type != "audio" && (
         <MediaPreview media={media} resetInputForm={resetFormInput} />
       )}
     </>

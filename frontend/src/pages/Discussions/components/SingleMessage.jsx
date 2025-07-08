@@ -19,28 +19,27 @@ const SingleMessage = ({ message, userid }) => {
   let content = "";
   if (Boolean(+message.deleted)) {
     content = (
-      <span className='flex items-center text-sm bg-emerald-600 max-w-[240px] p-2 rounded-xl text-gray-600 italic'>
-        <Ban className="w-4 h-4" /> <span>Ce message a été supprimé.</span>
+      <span className='flex items-center text-sm bg-blue-100 max-w-[240px] p-2 rounded-xl text-red-800 italic'>
+        <Ban className='w-4 h-4' /> <span>Ce message a été supprimé.</span>
       </span>
     );
   } else if (message.type === "text") {
     content = (
-      <span className='text-wrap break-words break-all inline-block bg-emerald-700 text-white max-w-[240px] min-w-[50px] px-2 py-2 rounded-2xl text-sm'>
-        {" "}
-        {message.content}{" "}
+      <span className='break-words inline-block bg-blue-100 text-blue-800 max-w-[240px] min-w-[50px] px-4 py-2 rounded-2xl text-sm font-medium shadow-sm border border-blue-200'>
+        {message?.content}
       </span>
     );
   } else if (message.type === "audio") {
     content = (
       <div>
-        <audio src={message.content} controls></audio>
+        <audio src={message?.content} controls></audio>
       </div>
     );
   } else if (message.type === "video") {
     content = (
       <div className='max-w-[260px] object-cover'>
         <span> {message.description && message.description} </span>
-        <video src={message.content} controls></video>
+        <video src={message?.content} controls></video>
       </div>
     );
   } else if (message.type === "image") {

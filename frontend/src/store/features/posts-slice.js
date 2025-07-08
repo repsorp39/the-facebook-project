@@ -44,6 +44,9 @@ const postsReducer = createSlice({
 
   },
   extraReducers:(builder)=>{
+    builder.addCase(fetchPosts.pending,(state,action) =>{
+      state.isFetching = true;
+    })
     builder.addCase(fetchPosts.fulfilled,(state,action) =>{
       state.posts = action.payload;
       state.isFetching = false;

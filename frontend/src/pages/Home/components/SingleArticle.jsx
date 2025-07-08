@@ -21,7 +21,7 @@ import PostDescription from "./PostDescription";
 import { FaHeart, FaThumbsUp } from "react-icons/fa";
 import { GoTrash } from "react-icons/go";
 
-const SingleArticle = ({ post,moderatorAction }) => {
+const SingleArticle = ({ post, moderatorAction }) => {
   const isModerator = useSelector((state) => state.auth.isModerator);
 
   const navigate = useNavigate();
@@ -49,22 +49,39 @@ const SingleArticle = ({ post,moderatorAction }) => {
 
   async function handleDelete(id) {
     try {
+      toast.loading("Suppression d'un post...", {
+        position:'top-center',
+        style: {
+          background: "#363636",
+          color: "#ff0000",
+        },
+      });
       await http.delete(`/articles/article.delete.php?post_id=${id}`);
       //lui il retire seulement du fil actuellement pour éviter des requetes pour recuperer
       //tous les postes à nouveau
       dispatch(deletePost(id));
 
       //dans le cas ou cette fonction est exécuté en tant que admin
-      if(isModerator) moderatorAction();
-      
+      if (isModerator) moderatorAction();
+
       toast.success("Post supprimé!");
     } catch (error) {
       toast.error("Une erreur est survenue lors de la suppression!");
+    }
+    finally{
+      toast.dismiss();
     }
   }
 
   async function handleEdit(id) {
     try {
+      toast.loading("Modification d'un post...", {
+        position:'top-center',
+        style: {
+          background: "#363636",
+          color: "#fff",
+        },
+      });
       const formData = new FormData();
       const data = {
         ...post,
@@ -82,6 +99,8 @@ const SingleArticle = ({ post,moderatorAction }) => {
       dispatch(updatePost(data));
     } catch (error) {
       toast.error("Une erreur est survenue lors de l'édition.");
+    } finally {
+      toast.dismiss();
     }
   }
 

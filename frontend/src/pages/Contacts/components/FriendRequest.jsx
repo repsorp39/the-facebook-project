@@ -12,34 +12,45 @@ import ContactListWrapper from "./ContactWrapper";
 import getAxiosInstance from "../../../config/axios-config";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import Loader from "../../../components/Loader";
 
 const FriendRequest = () => {
   const dispatch = useDispatch();
   const http = getAxiosInstance();
 
   const friendsRequest = useSelector(friendsReqSelector);
+  const isLoading = useSelector((state) => state.friends.isFetchingReq);
 
   const [limit, setLimit] = useState(6);
-
   async function handleConfirm(friendid) {
     try {
+      toast.loading("Confirmation d'une invitation", {
+        position: "top-center",
+        style: { color: "green" },
+      });
       const formData = new FormData();
       formData.append("id", friendid);
       await http.post("/friendship/friendship-confirm.php", formData);
       dispatch(confirmFriend(friendid));
-      toast.success("Et un nouvel ami de plus", { icon: "😉", duration: 3500 });
     } catch (err) {
       console.log(err);
+    } finally {
+      toast.dismiss();
     }
   }
 
   async function handleRejection(friendid) {
     try {
+      toast.loading("Suppression d'une invitation ...", {
+        position: "top-center",
+        style: { color: "red" },
+      });
       await http.delete(`/friendship/friendship-reject.php?id=${friendid}`);
       dispatch(removeRequest(friendid));
-      toast.success("Une invitation rejetée!", { icon: "💔", duration: 3500 });
     } catch (err) {
       console.log(err);
+    } finally {
+      toast.dismiss();
     }
   }
 
@@ -47,14 +58,18 @@ const FriendRequest = () => {
     dispatch(fetchFriendsRequest());
   }, []);
 
-  if (friendsRequest?.length === 0) {
+  if (isLoading) {
+    return <Loader message={"Chargement des invitations d'amis"} />;
+  }
+
+  if (!isLoading && friendsRequest.length === 0)
     return (
       <EmptyComponent
         Icon={PersonStanding}
-        message="Aucune demande d'amis pour l'instant."
+        message='Aucune suggestion disponible.'
       />
     );
-  }
+
   return (
     <>
       <h1 className='text-xl font-bold mb-10'>
@@ -106,9 +121,9 @@ const FriendRequest = () => {
             </div>
             <span
               onClick={() => handleRejection(friend.id)}
-              title="Retirer"
+              title='Retirer'
               className='absolute top-0 left-0 m-3 group-hover:bg-white p-2 rounded-full transition hover:text-red-600 cursor-pointer'
-              >
+            >
               <Trash2Icon className='w-6 h-5' />
             </span>
           </div>

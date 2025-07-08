@@ -5,6 +5,9 @@ const initialState = {
   friends:[],
   friendsRequest:[],
   friendsSuggestions:[],
+  isFetchingSuggestion:false,
+  isFetchingList:false,
+  isFetchingReq:false,
   loading:false
 };
 
@@ -61,16 +64,40 @@ const friendReducer = createSlice({
     }
   },
   extraReducers:(builder)=>{
+    //lists
+    builder.addCase(fetchFriends.pending,(state,{ payload }) =>{
+      state.isFetchingList = true;
+    });
     builder.addCase(fetchFriends.fulfilled,(state,{ payload }) =>{
       state.friends = payload;
+      state.isFetchingList = false;
+    });
+    builder.addCase(fetchFriends.rejected,(state,{ payload }) =>{
+      state.isFetchingList = false;
     });
 
+    //requetes
+    builder.addCase(fetchFriendsRequest.pending,(state,{ payload }) =>{
+      state.isFetchingReq = true;
+    });
     builder.addCase(fetchFriendsRequest.fulfilled,(state,{ payload }) =>{
       state.friendsRequest = payload;
+      state.isFetchingReq = false;
+    });
+    builder.addCase(fetchFriendsRequest.rejected,(state,{ payload }) =>{
+      state.isFetchingReq = false;
     });
 
+    //suggestions
+    builder.addCase(fetchFriendsSuggestions.pending,(state,{ payload }) =>{
+      state.isFetchingSuggestion = true;
+    });
     builder.addCase(fetchFriendsSuggestions.fulfilled,(state,{ payload }) =>{
       state.friendsSuggestions = payload;
+      state.isFetchingSuggestion = false;
+    });
+    builder.addCase(fetchFriendsSuggestions.rejected,(state,{ payload }) =>{
+      state.isFetchingSuggestion = false;
     });
 
   }

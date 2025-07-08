@@ -79,21 +79,26 @@ const ChatBar = () => {
         <h2 className='text-gray-600 font-semibold text-lg mb-2'>
           Discutez avec vos amis
         </h2>
-        <div className={`flex items-center gap-3 overflow-x-auto pb-1 h-[100px] rounded-md ${friendsList.length === 0 ? "place-content-center":""}`}>
+        <div
+          className={`flex items-center gap-3 overflow-x-auto pb-1  rounded-md ${
+            friendsList.length === 0 ? "" : ""
+          }`}
+        >
           {friendsList.length === 0 && (
-            <div>
-              <p className='flex text-gray-400 text-center items-center'>
-                {" "}
-                Aucun ami pour le moment <LiaFrownSolid className='w-8 h-8' />{" "}
-              </p>
-              <div>
-                {" "}
-                <Link className='block  text-sm text-center font-semibold text-white mt-2 bg-emerald-500 p-1  rounded-md' to={"/contacts/"}>
-                  Voir des suggestions
-                </Link>
-              </div>
+            <div className='flex flex-col w-full py-2 items-center justify-center text-center text-gray-500 bg-white rounded-md shadow-sm border border-gray-100'>
+              <LiaFrownSolid className='w-10 h-10 text-gray-400 mb-2' />
+
+              <p className='text-sm mb-2'>Aucun ami pour le moment</p>
+
+              <Link
+                to='/contacts/'
+                className='inline-block mt-2 px-4 py-2 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-md transition'
+              >
+                Voir des suggestions
+              </Link>
             </div>
           )}
+
           {/* si il n'y a pas de recherche en cours on retourne true toujours à filter */}
           {/* de sorte de récupérer toutes les occurences */}
           {friendsList.length > 0 &&

@@ -8,12 +8,16 @@ import { fetchPosts } from "../../../store/features/posts-slice";
 
 const Comments = ({ comments }) => {
   const userid = useSelector((state) => state.auth.userinfo.userid);
+  const isPostLoading = useSelector((state) => state.posts.isFetching);
+
   const dipatch = useDispatch();
   const http = getAxiosInstance();
 
   async function handleDelete(id) {
     try {
-      const res = await http.delete(`/comments/comments.delete.php?comment_id=${id}`);
+      const res = await http.delete(
+        `/comments/comments.delete.php?comment_id=${id}`
+      );
       dipatch(fetchPosts());
       toast.success("Commentaire supprimé");
     } catch (err) {
@@ -22,11 +26,10 @@ const Comments = ({ comments }) => {
     }
   }
 
-  if (comments.length === 0) {
+  if (isPostLoading) {
     return (
-      <div className='flex items-center justify-center gap-2 p-4 mt-2 bg-gray-50 rounded-md text-gray-500 text-sm'>
-        <Frown className='w-5 h-5 text-gray-400' />
-        <span>Aucun commentaire pour l'instant</span>
+      <div className='place-content-center flex flex-col justify-center content-center items-center'>
+        <div className='w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin'></div>
       </div>
     );
   }

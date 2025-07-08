@@ -3,7 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import getAxiosInstance from "../../config/axios-config";
 import Wrapper from "../../components/Wrapper";
-import { Ban, Camera, Dot, Ellipsis, Mail, PartyPopper, PersonStanding } from "lucide-react";
+import {
+  Ban,
+  Camera,
+  Dot,
+  Ellipsis,
+  Mail,
+  PartyPopper,
+  PersonStanding,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchUser } from "../../store/features/user-slice";
 import EmptyComponent from "../../components/EmptyComponent";
@@ -13,6 +21,8 @@ import CreatePost from "../../pages/Home/components/CreatePost";
 import EditProfile from "./components/EditProfile";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import Loader from "../../components/Loader";
+
 
 
 const Profil = () => {
@@ -31,6 +41,10 @@ const Profil = () => {
 
   async function handleEdit(e, userInfo) {
     try {
+      toast.loading("Modification des informations", {
+        position: "top-center",
+        style: { color: "green" },
+      });
       const formData = new FormData();
       const file = e?.target?.files?.[0];
 
@@ -51,8 +65,10 @@ const Profil = () => {
       await http.post("/users/user.update.php", formData);
       if (file) toast.success("Photo de profil mis à jour.");
       else toast.success("Informations modifiées.");
+      toast.dismiss();
       dispatch(fetchUser());
     } catch (error) {
+      toast.dismiss();
       toast.error("Une erreur est survenue!");
       console.log(error);
     }
@@ -85,16 +101,15 @@ const Profil = () => {
     }
   }
 
-
   useEffect(() => {
     if (paramsUserId) fetchProfileInfo();
   }, [paramsUserId]);
 
-  if (isLoading) return <div>Chargement ...</div>;
-
   return (
     <Wrapper>
-      {userNotFound ? (
+      {isLoading ? (
+        <Loader message={"Chargement des informations du profil"} />
+      ) : userNotFound ? (
         <EmptyComponent
           message={"Aucun utilisateur correspondant"}
           Icon={Ban}
@@ -174,14 +189,14 @@ const Profil = () => {
                   </div>
                 </div>
               </div>
-              <article className="flex flex-col content-center justify-center items-center md:flex-row  md:justify-between">
+              <article className='flex flex-col content-center justify-center items-center md:flex-row  md:justify-between'>
                 <div className='min-w-[260px] self-start group block rounded-xl  bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 '>
                   <div className='flex items-center gap-4'>
                     <div className='p-2 bg-blue-100 text-blue-600 rounded-full'>
                       <Mail />
                     </div>
                     <div className='text-sm font-medium text-gray-800 group-hover:text-blue-700 transition'>
-                      <h4 className="font-bold">Email</h4>
+                      <h4 className='font-bold'>Email</h4>
                       {user.profile.email}
                     </div>
                   </div>
@@ -192,19 +207,23 @@ const Profil = () => {
                       <PartyPopper />
                     </div>
                     <div className='text-sm font-medium text-gray-800 group-hover:text-red-500 transition'>
-                    <h4 className="font-bold">Né(e) le </h4>
-                    {format(new Date(user.profile.birthday), "EEEE d MMMM yyyy", { locale: fr })}
+                      <h4 className='font-bold'>Né(e) le </h4>
+                      {format(
+                        new Date(user.profile.birthday),
+                        "EEEE d MMMM yyyy",
+                        { locale: fr }
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className='min-w-[260px] self-start group block rounded-xl  bg-blue-50 transition border-gray-200 shadow-sm border-2 p-4 '>
                   <div className='flex items-center gap-4'>
                     <div className='p-2 bg-blue-100 text-blue-600 rounded-full'>
-                      { user.profile.gender === "M" ? <FaMale /> :<FaFemale />}
+                      {user.profile.gender === "M" ? <FaMale /> : <FaFemale />}
                     </div>
                     <div className='text-sm font-medium text-gray-800 group-hover:text-blue-700 transition'>
-                    <h4 className="font-bold">Genre</h4>
-                    {user.profile.gender === "M" ? "Homme":"Femme"}
+                      <h4 className='font-bold'>Genre</h4>
+                      {user.profile.gender === "M" ? "Homme" : "Femme"}
                     </div>
                   </div>
                 </div>

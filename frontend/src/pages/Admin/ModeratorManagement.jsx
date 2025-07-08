@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import getAxiosInstance from "../../config/axios-config";
 import { TbTrashXFilled } from "react-icons/tb";
+import { PersonStanding } from "lucide-react";
 import Modal from "../../components/Modal";
 
 const ModeratorManagement = () => {
@@ -18,9 +19,15 @@ const ModeratorManagement = () => {
 
   async function fetchModerators() {
     try {
+      toast.loading("Chargement des modérateurs", {
+        position: "top-center",
+        style: { background: "black",color:"#fff" },
+      });
       const res = await http.get("/admin/moderator.get.php");
       setModerators(res.data);
+      toast.dismiss();
     } catch (err) {
+      toast.dismiss();
       console.log(err);
       toast.error("Une erreur est survenue!");
     }
@@ -28,6 +35,10 @@ const ModeratorManagement = () => {
 
   async function removeModerator() {
     try {
+      toast.loading("Suppression d'un modérateur", {
+        position: "top-center",
+        style: { background: "black", color: "red" },
+      });
       await http.delete(`/admin/moderator.delete.php?id=${id}`);
       toast.success("Utilisateur supprimé");
 
@@ -36,9 +47,9 @@ const ModeratorManagement = () => {
       setModerators(filteredModerators);
       closeModal();
     } catch (error) {
+      closeModal();
       console.log(error);
       toast.error("Une erreur est survenue!");
-      closeModal();
     }
   }
 
@@ -50,9 +61,11 @@ const ModeratorManagement = () => {
   const closeModal = () => {
     setModeratorModalOpen(false);
     setId("");
+    toast.dismiss();
   };
 
   useEffect(() => {
+    toast.dismiss();
     fetchModerators();
   }, []);
 
@@ -134,6 +147,14 @@ const ModeratorManagement = () => {
                 ))}
               </tbody>
             </table>
+            {moderators.length === 0 && (
+              <div className='w-full flex flex-col items-center flex-grow justify-center bg-red-40 text-gray-500 font-semibold p-2 place-content-center'>
+                <div className='w-[250px] h-[100px] mx-auto flex flex-col items-center justify-center '>
+                  {" "}
+                  <PersonStanding /> Aucun modérateurs trouvés{" "}
+                </div>
+              </div>
+            )}
           </section>
         </div>
       </div>

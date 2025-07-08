@@ -23,8 +23,7 @@ import ArticleManage from "./pages/Moderator/ArticleManage";
 import ModeratorManagement from "./pages/Admin/ModeratorManagement";
 import Statistiques from "./pages/Admin/Statistiques";
 import CommonRoutes from "./components/CommonRoutes";
-import EmptyComponent from "./components/EmptyComponent";
-import { Loader } from "lucide-react";
+import Loader from "./components/Loader";
 
 function App() {
   const isLoading = useSelector((state) => state.auth.isLoading);
@@ -32,7 +31,7 @@ function App() {
   if (isLoading)
     return (
       <div className='min-h-[100vh] overflow-x-auto place-content-center'>
-        <EmptyComponent message={"Chargement de Let's Chat"} Icon={Loader} />
+          <Loader message={"Votre application se charge"} />
       </div>
     );
 

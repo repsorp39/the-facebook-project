@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdminNavBar from "../../components/AdminNavBar";
-import getAxiosInstance from "../../config/axios-config";
-import toast from "react-hot-toast";
 import SingleArticle from "../Home/components/SingleArticle";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts,deletePost } from "../../store/features/posts-slice";
+import Loader from  "../../components/Loader";
 
 const ArticleManage = () => {
   const dispatch = useDispatch();
@@ -13,6 +12,7 @@ const ArticleManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = new Array(Math.ceil(posts.length / defaultLimit)).fill(0);
+  const isFetching = useSelector(state => state.posts.isFetching);
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -34,6 +34,9 @@ const ArticleManage = () => {
             </p>
           </div>
           {/* All posts */}
+          {
+            isFetching && <Loader message={"Chargement des posts"} />
+          }
           <div>
             {Array.from(posts)
               .slice(0, defaultLimit * currentPage)

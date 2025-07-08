@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import getAxiosInstance from "../../../config/axios-config";
@@ -6,12 +6,14 @@ import { fetchPosts } from "../../../store/features/posts-slice";
 
 const CommentCreation = ({ postid, hideCommentForm }) => {
   const dispatch = useDispatch();
-
+  
   const userprofile = useSelector((state) => state.auth.userinfo.picture);
   const [comment, setComment] = useState("");
+  const [isLoading,setLoading] = useState(false);
 
   async function handleNewComment() {
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("post_id", postid);
       formData.append("content", comment);
@@ -54,7 +56,7 @@ const CommentCreation = ({ postid, hideCommentForm }) => {
           <button
             disabled={comment.trim() === ""}
             onClick={handleNewComment}
-            className=' text-[14px] p-2 font-light rounded-md text-white shadow-sm bg-blue-600 hover:bg-blue-500 transition ms-2 disabled:cursor-not-allowed disabled:bg-blue-500'
+            className={`text-[14px] p-2 font-light rounded-md text-white shadow-sm bg-blue-600 hover:bg-blue-500 transition ms-2 disabled:cursor-not-allowed disabled:bg-blue-500 ${ isLoading ? "button is-loading":""}`}
           >
             Commenter
           </button>

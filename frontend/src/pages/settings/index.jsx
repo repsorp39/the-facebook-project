@@ -4,7 +4,6 @@ import {
   FaUser,
   FaLock,
   FaEnvelope,
-  FaPhone,
   FaCamera,
   FaEye,
   FaEyeSlash,
@@ -39,6 +38,7 @@ const Settings = () => {
   });
 
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleProfileChange = (e) => {
     setProfileData({
@@ -65,16 +65,18 @@ const Settings = () => {
       formData.append("picture", file);
     }
     try {
+      toast.loading("Modification des informations", {
+        position: "top-center",
+        style: { color: "green", background:"black" },
+      });
       const response = await http.post("users/user.update.php", formData);
       toast.success("Profil mis à jour avec succès!");
       dispatch(fetchUser());
+      toast.dismiss();
     } catch (error) {
+      toast.dismiss();
       console.error("Erreur lors de la mise à jour:", error);
       toast.error("Erreur lors de la mise à jour du profil");
-    }finally{
-      setTimeout(()=>{
-        toast.dismiss();
-      },1500)
     }
   };
 
@@ -95,11 +97,15 @@ const Settings = () => {
     }
 
     try {
+      toast.loading("Modification du mot de passe", {
+        position: "top-center",
+        style: { color: "green", background:"black" },
+      });
       const formData = new FormData();
-      formData.append("old_password",passwordData.currentPassword);
-      formData.append("new_password",passwordData.newPassword);
-      const response = await http.post("users/user.change-pass.php",formData);
-
+      formData.append("old_password", passwordData.currentPassword);
+      formData.append("new_password", passwordData.newPassword);
+      const response = await http.post("users/user.change-pass.php", formData);
+      toast.dismiss();
       toast.success("Mot de passe modifié avec succès!");
 
       // Reset form
@@ -109,21 +115,24 @@ const Settings = () => {
         confirmPassword: "",
       });
     } catch (error) {
+      toast.dismiss();
       console.error(error);
-      if(error.status === 403) toast.error("Ancien mot de passe incorrecte!")
-      toast.error(
-          "Erreur lors du changement de mot de passe"
-      );
+      if (error.status === 403) toast.error("Ancien mot de passe incorrecte!");
+      toast.error("Erreur lors du changement de mot de passe");
     }
   };
 
   const handleImageUpload = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.type.startsWith("image") && selectedFile.size < 5_000_000) {
+    if (
+      selectedFile &&
+      selectedFile.type.startsWith("image") &&
+      selectedFile.size < 5_000_000
+    ) {
       setFile(selectedFile);
-      toast.success("Vous avez sélectionner une photo",{ duration:Infinity})
+      toast.success("Vous avez sélectionner une photo", { duration: Infinity });
       console.log("Image uploaded:", selectedFile);
-    }else{
+    } else {
       toast.error("Image de moins de 5 mo autorisés!");
     }
   };

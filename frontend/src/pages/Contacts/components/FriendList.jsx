@@ -11,29 +11,38 @@ import ContactListWrapper from "./ContactWrapper";
 import ContactCardFriend from "./ContactCardFriend";
 import getAxiosInstance from "../../../config/axios-config";
 import toast from "react-hot-toast";
+import Loader from "../../../components/Loader";
 
 const FriendList = () => {
   const dispatch = useDispatch();
   const friends = useSelector(friendsSelector);
 
   const [limit, setLimit] = useState(6);
+  const isLoading = useSelector((state) => state.friends.isFetchingList);
 
   useEffect(() => {
     dispatch(fetchFriends());
   }, []);
 
-  if (friends.length === 0) {
-    return <EmptyComponent Icon={UserX2} message='Aucun amis pour le moment' />;
+  if (isLoading) {
+    return <Loader message={"Chargement de votre liste d'amis"} />;
   }
+
+  if (!isLoading && friends.length === 0)
+    return <EmptyComponent Icon={UserX2} message='Aucun ami pour le moment.' />;
 
   async function handleRejection(friendid) {
     try {
+      toast.loading("Suppression d'un ami", {
+        position: "top-center",
+      });
       const http = getAxiosInstance();
       await http.delete(`/friendship/friendship-reject.php?id=${friendid}`);
       dispatch(removeFriend(friendid));
-      toast.success("Un ami retiré!", { icon: "💔", duration: 3500 });
     } catch (err) {
       console.log(err);
+    } finally {
+      toast.dismiss();
     }
   }
 
