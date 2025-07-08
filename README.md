@@ -292,10 +292,8 @@ const res = await axios.post("/users/user.create.php",formData)
 
 # 🙌 Auteurs
 
-[Prosper AZA](https://github.com/repsorp39)
-
----
-[KEKE Karmel](https://github.com/SanManjiro)
+- [Prosper AZA](https://github.com/repsorp39)
+- [KEKE Karmel](https://github.com/SanManjiro)
 
 
 
