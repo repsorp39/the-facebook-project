@@ -96,7 +96,7 @@ npm run start
 
     Déploiement Vercel : Voir la démo
 
-    Dépôt GitHub : Voir le code
+    Dépôt GitHub : [git@github.com:repsorp39/the-facebook-project.git](git@github.com:repsorp39/the-facebook-project.git)
 ```
 
 
