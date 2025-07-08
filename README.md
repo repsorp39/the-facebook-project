@@ -19,6 +19,18 @@ Ce projet a pour but de se familiariser avec :
 
 ---
 
+## 👥 Comptes de test
+
+Utilise les identifiants ci-dessous pour tester l’application selon différents rôles :
+
+| Rôle        | Email                    | Mot de passe   |
+|-------------|--------------------------|----------------|
+| 👑 Admin     | admin@admin.com         | 123456789       |
+| 🛡️ Modérateur | moderator@moderator.com| 123456789   |
+| 🙋 Utilisateur | user@user.com     | 123456789        |
+
+--- 
+
 # Frontend
 
 
