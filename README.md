@@ -29,6 +29,22 @@ Utilise les identifiants ci-dessous pour tester l’application selon différent
 | 🛡️ Modérateur | moderator@moderator.com| 123456789   |
 | 🙋 Utilisateur | user@user.com     | 123456789        |
 
+
+
+## 🌐 Démo
+
+Déploiement Render: [https://the-facebook-project.onrender.com](https://the-facebook-project.onrender.com)
+
+Dépôt GitHub : [https://github.com/repsorp39/the-facebook-project](https://github.com/repsorp39/the-facebook-project)
+
+
+# 🙌 Auteurs
+
+- [Prosper AZA](https://github.com/repsorp39)
+- [Karmel KEKE](https://github.com/SanManjiro)
+
+
+
 --- 
 
 # Frontend
@@ -92,14 +108,6 @@ npm install
 npm run start
 
 ```
-
-## 🌐 Démo
-
-Déploiement Render: [https://the-facebook-project.onrender.com](https://the-facebook-project.onrender.com)
-
-Dépôt GitHub : [https://github.com/repsorp39/the-facebook-project](https://github.com/repsorp39/the-facebook-project)
-
-
 
 # Backend 
 
@@ -299,15 +307,3 @@ const res = await axios.post("/users/user.create.php",formData)
    - Vérifier l'expiration du token
 
 -----
-
-
-
-
-# 🙌 Auteurs
-
-- [Prosper AZA](https://github.com/repsorp39)
-- [KEKE Karmel](https://github.com/SanManjiro)
-
-
-
----
