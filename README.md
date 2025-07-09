@@ -94,9 +94,9 @@ npm run start
 
 🌐 Démo
 
-    Déploiement Vercel : Voir la démo
+    Déploiement Render: (https://the-facebook-project.onrender.com)[https://the-facebook-project.onrender.com]
 
-    Dépôt GitHub : [git@github.com:repsorp39/the-facebook-project.git](git@github.com:repsorp39/the-facebook-project.git)
+    Dépôt GitHub : [https://github.com/repsorp39/the-facebook-project](https://github.com/repsorp39/the-facebook-project)
 ```
 
 
