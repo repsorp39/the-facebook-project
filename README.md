@@ -4,7 +4,7 @@
 ![PHP](https://img.shields.io/badge/Backend-PHP-informational?logo=php)
 ![TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS-06B6D4?logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Deploy](https://img.shields.io/badge/Deployed-Vercel-black?logo=vercel)
+![Deploy](https://img.shields.io/badge/Deployed-Render-blue?logo=render)
 
 > Une reproduction légère de Facebook pour explorer les concepts fondamentaux du développement web fullstack.
 
