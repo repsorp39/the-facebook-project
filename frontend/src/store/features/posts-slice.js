@@ -40,6 +40,10 @@ const postsReducer = createSlice({
     dislike(state,{ payload }){
       const index = state.posts.findIndex((post) => post.post_id === payload.post_id);
       state.posts[index].likes = state.posts[index].likes.filter((id) => id !== payload.userid );
+    },
+
+    setPosts(state, { payload }){
+      state.posts = payload;
     }
 
   },
@@ -61,6 +65,7 @@ const postsReducer = createSlice({
 export default postsReducer.reducer;
 export const deletePost = postsReducer.actions.delete;
 export const updatePost = postsReducer.actions.update;
+export const setPosts= postsReducer.actions.setPosts;
 export const likePost = postsReducer.actions.like;
 export const dislikePost = postsReducer.actions.dislike;
 export { fetchPosts };

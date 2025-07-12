@@ -22,12 +22,14 @@ import EditProfile from "./components/EditProfile";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Loader from "../../components/Loader";
+import { setPosts } from "../../store/features/posts-slice";
 
 
 
 const Profil = () => {
   const http = getAxiosInstance();
   const loginUser = useSelector((state) => state.auth.userinfo);
+  const posts = useSelector(state => state.posts.posts);
   const dispatch = useDispatch();
 
   const { userid: paramsUserId } = useParams();
@@ -93,6 +95,8 @@ const Profil = () => {
         friends: data.friends,
         posts: data.posts,
       });
+      dispatch(setPosts(data.posts));
+
     } catch (err) {
       console.log(err);
       setUserNotFound(true);
@@ -241,12 +245,12 @@ const Profil = () => {
                     : `Récentes publications de ${user.profile.lastname}`}{" "}
                 </h1>
               </div>
-              {user.posts.length === 0 ? (
+              {posts.length === 0 ? (
                 <EmptyComponent Icon={Ban} message={"Aucun posts récents"} />
               ) : (
                 <>
                   <div className='mt-5'>
-                    {user.posts.map((post) => (
+                    {posts.map((post) => (
                       <SingleArticle key={post.post_id} post={post} />
                     ))}
                   </div>
