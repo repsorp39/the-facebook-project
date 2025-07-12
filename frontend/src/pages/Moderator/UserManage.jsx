@@ -12,9 +12,12 @@ import { FaPlus } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import Modal from "../../components/Modal";
 import { PersonStanding } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const UserManage = () => {
   const http = getAxiosInstance();
+  const navigate = useNavigate();
+
   const isAdmin = useSelector((state) => state.auth.isAdmin);
 
   const defaultLimit = 10;
@@ -166,7 +169,8 @@ const UserManage = () => {
                         <img
                           src={user.picture}
                           alt='Avatar'
-                          className='w-10 h-10 rounded-full object-cover border'
+                          onClick={()=>navigate(`/profile/${user.id}`)}
+                          className='w-10 h-10 rounded-full object-cover border shrink-0 hover:scale-105 cursor-pointer'
                         />
                       </td>
 
